@@ -10,11 +10,11 @@ RSpec.describe Minesweeper::BoardEntity do
 			end
 
 			it 'has a default dimension' do
-				expect(board.rows).to eq Minesweeper::BoardEntity::DefaultRows
+				expect(board.num_rows).to eq Minesweeper::BoardEntity::DefaultRows
 			end
 
 			it 'has a default number of mines' do
-				expect(board.mines).to eq Minesweeper::BoardEntity::DefaultMines
+				expect(board.num_mines).to eq Minesweeper::BoardEntity::DefaultMines
 			end
 		end
 
@@ -25,15 +25,18 @@ RSpec.describe Minesweeper::BoardEntity do
 
 		context 'with valid params' do
 			it 'sets up rows' do
-				expect(board.rows).to eq rows
+				expect(board.num_rows).to eq rows
 			end
 
 			it 'sets up columns' do
-				expect(board.cols).to eq cols
+				expect(board.num_cols).to eq cols
 			end
 
 			it 'sets up mines' do
-				expect(board.mines).to eq mines
+				expect(board.num_mines).to eq mines
+			end
+
+			it 'loads the board' do
 			end
 		end
 
@@ -51,5 +54,12 @@ RSpec.describe Minesweeper::BoardEntity do
 			end
 		end
 	end
-end
 
+	describe '#draw' do
+		let(:board) { described_class.new(rows: 8, cols: 10, mines: 15) }
+		it "draws" do
+			puts board.draw
+		end
+	end
+
+end
