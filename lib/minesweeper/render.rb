@@ -4,20 +4,36 @@ module Minesweeper
 			@table = table
 		end
 
-		def draw
+		def draw(cell_renderer = RenderCellHidden)
 			rows = []
 			(1..@table.num_rows).each do |r|
 				row = []
 				(1..@table.num_cols).each do |c|
-					row.push render_cell @table.get_cell(r,c)
+					row.push cell_renderer.render @table.get_cell(r,c)
 				end
 				rows.push row.join('')
 			end
 			puts rows.join("\n")
 		end
 
-		def render_cell(cell)
-			cell.hidden? ? 'X' : cell.mine? ? 'B' : 's'
+		def draw_revealed
+			draw(RenderCellRevealed)
+		end
+
+		def render(cell)
+			self.send @renderer, cell
+		end
+	end
+
+	class RenderCellHidden
+		def self.render(cell)
+			cell.hidden? ? 'X' : RenderCellRevealed.render(cell)
+		end
+	end
+
+	class RenderCellRevealed
+		def self.render(cell)
+			cell.mine? ? 'B' : 's'
 		end
 	end
 end

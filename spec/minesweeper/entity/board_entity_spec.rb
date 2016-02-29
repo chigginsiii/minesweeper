@@ -59,6 +59,10 @@ RSpec.describe Minesweeper::BoardEntity do
 		let(:board) { described_class.new(rows: 8, cols: 10, mines: 15) }
 		it "draws" do
 			puts board.draw
+
+			puts
+
+			puts board.draw_revealed
 		end
 	end
 
