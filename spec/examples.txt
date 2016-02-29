@@ -1,3 +1,0 @@
-example_id                                            | status | run_time        |
------------------------------------------------------ | ------ | --------------- |
-./spec/minesweeper/entity/board_entity_spec.rb[1:1:1] | passed | 0.00146 seconds |
