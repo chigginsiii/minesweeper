@@ -14,6 +14,26 @@ TODO
 		- is not-touching: recursive reveal
 		- is touching: reveal
 
+	- game state:
+		- game_status: new, running, won, lost
+		- mines total / mines - flags out
+		- board (draw): to spec, with rows / cols drawn
+
+	- hook up to cmd line client:
+		- start menu: q -> quit, space -> start
+			- start: draw board, show mines/remains, menu:
+				LOOP:
+				- f(lag) [row] [col]
+				- r(eveal) [row] [col]
+				- q(uit)
+				=> execute command
+				=> update table
+				=> draw board
+				WON: display WON! space / q
+				LOST: reveal whole board, space / q
+				CONTINUE:
+				=> continue LOOP
+
 DONE: 
 
 * key method: adjacent_cells()
