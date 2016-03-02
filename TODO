@@ -1,0 +1,41 @@
+TODO
+
+* use cases: game = Minesweeper.new(rows, cols, mines)
+
+	- generate new game 
+	X (perhaps change "board" to "game")
+
+	- flag cell: game.flag(r, c, callbacks)
+		- flagged/unflagged: toggle state
+
+	- reveal cell:
+		- flagged: do nothing
+		- is mine: boom
+		- is not-touching: recursive reveal
+		- is touching: reveal
+
+DONE: 
+
+* key method: adjacent_cells()
+	- Enumerable that takes a coord and turns it into:
+	  top-left, top-center, top-right
+	  left, right
+	  bottom-left, bottom-right, bottom-center
+	  r-1:c-1 r-1:c r-1:c+1
+	  r:c-1         r:c+1
+	  r+1:c-1 r+1:c r+1:c+1
+
+* cell states:
+
+- init:
+	- revealed: false
+	- flagged: false
+	- transittion to: flagged, revealed
+- flagged:
+	- revealed: false
+	- flagged: true
+	- transitions: unflagged
+- revealed:
+  - revealed: true
+  - flagged: false
+  - transitions: TERMINAL

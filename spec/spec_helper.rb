@@ -1,4 +1,5 @@
 require 'rspec'
+require 'pp'
 require 'minesweeper'
 
 RSpec.configure do |config|

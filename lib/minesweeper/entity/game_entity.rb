@@ -1,5 +1,5 @@
 module Minesweeper
-	class BoardEntity
+	class GameEntity
 		extend Forwardable
 		def_delegators :@table, :num_rows, :num_cols, :num_mines
 		def_delegators :@renderer, :draw, :draw_revealed

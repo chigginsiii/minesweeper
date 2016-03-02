@@ -1,33 +1,47 @@
 module Minesweeper
 	class CellEntity
 
-		attr_reader :type
-
 		class << self
-			def mine
-				new type: :mine
+			def mine(row:, col:)
+				self.new(mine: true, row: row, col: col)
 			end
 
-			def safe
-				new type: :safe
+			def safe(row:, col:)
+				self.new(row: row, col: col)
 			end
 		end
 
-		def initialize (type:)
-			@type 		= type
+		attr_reader :row, :col
+
+		def initialize (row:, col:, mine: false)
+			@row      = row
+			@col      = col
+			@mine     = mine
+			@flagged  = false
 			@revealed = false
 		end
 
 		def mine?
-			type == :mine
-		end
-
-		def hidden?
-			!@revealed
+			@mine == true
 		end
 
 		def reveal
+			raise Minesweeper::SelectError, 'cannot reveal flagged cell' if flagged?
 			@revealed = true
 		end
+
+		def revealed?
+			@revealed == true
+		end
+
+		def toggle_flag
+			raise Minesweeper::SelectError, 'revealed cell cannot be flagged' if revealed?
+			@flagged = !@flagged
+		end
+
+		def flagged?
+			@flagged == true
+		end
+
 	end
 end
