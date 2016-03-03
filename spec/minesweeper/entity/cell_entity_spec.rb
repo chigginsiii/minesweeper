@@ -2,11 +2,12 @@ require 'rspec'
 
 RSpec.describe Minesweeper::CellEntity do
 
-	let(:cell) { described_class.new(row: 1, col: 1) }
+	let(:point) { Minesweeper::PointEntity.new( row: 1, col: 1) }
+	let(:cell) { described_class.new(point: point) }
 
 	describe '#mine?' do
 		context 'when initialized as a mine' do
-			let(:cell) { described_class.new(row: 1, col: 1, mine: true) }
+			let(:cell) { described_class.new(point: point, mine: true) }
 			it 'responds true' do
 				expect(cell.mine?).to eq true
 			end

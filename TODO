@@ -1,11 +1,5 @@
 TODO
 
-UI:
-- game state: begin, inprog, won, lost
-- status: flags / num_mines
-- color!
+- render: color?
 
-Game:
-- rename _Entity to _, or...
-- make the entities data-only and migrate logic to use-cases
-
+DONE:

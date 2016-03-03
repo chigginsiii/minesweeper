@@ -2,95 +2,105 @@ module Minesweeper
 	class GameEntity
 		extend Forwardable
 
-		attr_reader :table, :last_action, :status
-		attr_accessor :position
+		attr_reader :board, :status, :renderer, :position
 
-		def_delegators :@table, :num_rows, :num_cols, :num_mines
-		def_delegators :@renderer, :draw, :draw_revealed
-
-		DefaultRows 	= 10
-		DefaultCols 	= 12
-		DefaultMines 	= 20
-
-		def initialize (rows: DefaultRows, cols: DefaultCols, mines: DefaultMines)
-			@position = [1,1]
-			@table = Minesweeper::TableEntity.new(rows, cols, mines)
-			@renderer = Minesweeper::Render.new(self)
-			set_last_action "initialized game"
-			set_status "Good Luck!"
-		end
-
-		def set_last_action(msg='')
-			@last_action = msg
-		end
-
-		def set_status(status = '')
-			@status = status
-		end
+		def_delegators :@board, :num_rows, :num_cols, :num_mines, :flagged_cells  
+		def_delegators :@renderer, :draw
 
 		#
-		# the logic in here is becoming less organized, more coupled and !DRY.
-		# probably a cmd dispatcher to handle common status/win checks and some
-		# serious refactoring of conditional branches is in order.
+		# set_status  -> real game status
+		# command dispatch:, gather common housekeeping functions, call use_cases
+		# what are the real game states? start with: [inprog, won, lost]
+		# 
+		# api: game.status in [ in_progress, complete ]
+		# 		 game.result in [ won, lost ]
+		# 		 game.board (fka: board)
 		#
-		# it may also be about (past) time to pull the logic out of the entities
-		# and to put it into use cases. Repos aren't necessary yet.
-		#
+
+		def initialize (rows:, cols:, mines:)
+			@position = PositionEntity.new(row: 1, col: 1, rows: rows, cols: cols)
+			@board 		= BoardEntity.new(rows, cols, mines)
+			@renderer = Render.new(self)
+			@status 	= StatusEntity.new
+
+			status.begin
+		end
+
+		def dispatch_action(action, *opts)
+			return if status.complete?
+
+			case action
+			when :move
+				move opts[0]
+			when :toggle
+				toggle_flag
+			when :reveal
+				reveal_cell
+			end
+
+			check_for_winner
+		end
+
+		def write_flash_msg(msg)
+			@flash_message = msg
+		end
+
+		def read_flash_msg
+			retval = @flash_message
+			@flash_message = ''
+			retval
+		end
+
+		private
+
+		def check_for_winner
+			return if status.lost?
+			all_cells = board.all_cells.count
+			revealed_cells = board.revealed_cells.count
+			num_mines = board.num_mines
+
+			write_flash_msg "all: #{all_cells} revealed: #{revealed_cells} mines: #{num_mines}"
+
+			# num mines should equal total cells minus total hidden
+			if all_cells == revealed_cells + num_mines
+				status.complete :won
+				write_flash_msg "YOU WON!"
+			end
+		end
 
 		def move(dir)
-			set_status
-			prev = @position.to_s
-			case dir
-			when :up
-				@position[0] -= 1 unless @position[0] <= 1
-			when :down
-				@position[0] += 1 unless @position[0] >= num_rows
-			when :left
-				@position[1] -= 1 unless @position[1] <= 1
-			when :right
-  			@position[1] += 1 unless @position[1] >= num_cols
-  		end
-  		set_last_action "moved from #{prev} to #{@position.to_s}"
+			position.send(dir)
 		end
+
+		# use case. yep.
 
 		def toggle_flag
-			set_status
-			cell = table.get_cell(row: @position[0], col: @position[1])
+			cell = board.get_cell(position)
 			cell.toggle_flag
-			check_for_winner
 		rescue SelectError
-			set_status "can't flag revealed cell"
-		ensure
-			set_last_action "flag #{cell.coords}"
+			set_flash_msg "can't flag revealed cell"
 		end
 
+		# ditto.
+
 		def reveal_cell
-			set_status
-			cell = table.get_cell(row: @position[0], col: @position[1])
+			cell = board.get_cell(position)
 			return if cell.revealed?
 			cell.reveal
 			handle_reveal cell
 		rescue SelectError
-			set_status "can't reveal flagged cell" # except on your first move... grrr.		
-		ensure
-			set_last_action "reveal #{cell.coords}"
+			write_flash_msg "can't reveal flagged cell" # except on your first move... grrr.		
 		end
 
 		def handle_reveal(cell)
 			if cell.mine?
-				set_status "BOOM"
-				table.reveal_all_cells
+				status.complete :lost
+				write_flash_msg "YOU LOSE!"
+				board.reveal_all_cells
 			else
-				if cell.adjacent_mines.count == 0
-					table.reveal_adjacent_cells cell
+				if board.adjacent_mines(cell).count == 0
+					board.reveal_adjacent_cells cell
 				end
-				check_for_winner
-			end
-		end
-
-		def check_for_winner
-			if table.flagged_cells.count == num_mines
-				set_status "WIN!"
 			end
 		end
 	end

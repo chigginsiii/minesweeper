@@ -5,9 +5,9 @@ require 'dispel'
 require 'highline'
 require 'minesweeper'
 
-@board_rows  = Minesweeper::GameEntity::DefaultRows
-@board_cols  = Minesweeper::GameEntity::DefaultCols
-@board_mines = Minesweeper::GameEntity::DefaultMines
+@board_rows  = Minesweeper::DefaultRows
+@board_cols  = Minesweeper::DefaultCols
+@board_mines = Minesweeper::DefaultMines
 
 def return_num(val)
   num = val.to_i
@@ -38,7 +38,7 @@ def setup
 end
 
 def setup_game
-	@game = Minesweeper::GameEntity.new(rows: @board_rows, cols: @board_cols, mines: @board_mines)
+	@game = Minesweeper.new_game(rows: @board_rows, cols: @board_cols, mines: @board_mines)
 end
 
 def start_game
@@ -48,19 +48,13 @@ def start_game
 		Dispel::Keyboard.output do |key|
 			case key
 			# move selection
-			when :up
-				@game.move :up
-			when :down
-				@game.move :down
-			when :left
-				@game.move :left
-			when :right
-				@game.move :right
+			when :up, :down, :left, :right
+				@game.dispatch_action :move, key
 			# actions
 			when 'f'
-				@game.toggle_flag
+				@game.dispatch_action :toggle
 			when 's'
-				@game.reveal_cell
+				@game.dispatch_action :reveal
 			when 'q'
 				break
 			when 'r'
@@ -72,7 +66,7 @@ def start_game
 end
 
 def draw(game)
-	[*(game.draw), "position: #{@game.position}", "last action: #{@game.last_action}", "status: #{@game.status}", "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit." ].join("\n")
+	[*(game.draw), "position: #{@game.position}", "status: #{@game.status}", "msg: #{game.read_flash_msg}", "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit." ].join("\n")
 end
 
 setup
