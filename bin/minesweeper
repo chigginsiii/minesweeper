@@ -48,19 +48,13 @@ def start_game
 		Dispel::Keyboard.output do |key|
 			case key
 			# move selection
-			when :up
-				@game.move :up
-			when :down
-				@game.move :down
-			when :left
-				@game.move :left
-			when :right
-				@game.move :right
+			when :up, :down, :left, :right
+				@game.dispatch_action :move, key
 			# actions
 			when 'f'
-				@game.toggle_flag
+				@game.dispatch_action :toggle
 			when 's'
-				@game.reveal_cell
+				@game.dispatch_action :reveal
 			when 'q'
 				break
 			when 'r'

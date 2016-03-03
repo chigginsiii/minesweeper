@@ -1,6 +1,10 @@
 TODO
 
-- game_entity => game (it's not an entity)
+- status tests
+- coords tests, position tests
+- change table tests to board tests
+- update cell tests
+
 - table => board
 - cells => coord
 - render: color?
@@ -11,3 +15,9 @@ DONE:
 - moved defaults into Minesweeper
 - change defaults in Minesweeper::Game/Board
 - updated game entity with coords/position/status
+
+- coord.get_cell board
+- coord.put_cell board
+
+- RECONSIDERED: game_entity => game (it's not an entity)
+  - when use cases come into play, all entities give up logic to use cases. game is still an entity

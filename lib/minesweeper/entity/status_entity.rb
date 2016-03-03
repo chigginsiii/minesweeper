@@ -1,8 +1,9 @@
 module Minesweeper
 	class StatusEntity
 		attr_accessor :state, :result
+
 		def initialize
-			@state = :initial
+			@state  = :initial
 			@result = :incomplete
 		end
 
@@ -11,22 +12,13 @@ module Minesweeper
 		#
 
 		def begin
-			@state = :in_prog
+			@state = :in_progress
 		end
 
-		def complete
-			@state = :complete
-			self
-		end
-
-		def win
-			@result = :won
-			self
-		end
-
-		def lose
-			@result = :lost
-			self
+		def complete(result)
+			validate_result result
+			@state  = :complete
+			@result = result
 		end
 
 		#
@@ -39,6 +31,7 @@ module Minesweeper
 
 		def in_progress?
 			@state == :in_progress
+		end
 
 		def won?
 			@result == :won
@@ -53,8 +46,14 @@ module Minesweeper
 		#
 
 		def to_s
-			"#{@state}#{complete? ? @result : ''}")
+			retval = @state.to_s
+			retval += ":#{@result}" if complete?
+		end
+
+		private
+
+		def validate_result(result)
+			raise StatusError, "invalid result '#{result}' (:won, :lost)" unless [:won, :lost].include? result
 		end
 	end
 end
-

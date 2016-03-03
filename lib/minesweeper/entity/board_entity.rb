@@ -1,5 +1,5 @@
 module Minesweeper
-	class TableEntity
+	class BoardEntity
 		attr_reader :num_rows, :num_cols, :num_mines
 
 		# XXX: move to config when configs available
@@ -14,12 +14,12 @@ module Minesweeper
 			setup
 		end
 
-		def get_cell(row:, col:)
-			@table[(row - 1)][(col - 1)]
+		def get_cell(coord)
+			coord.get_cell @board
 		end
 
 		def put_cell(cell)
-			@table[cell.row - 1][cell.col - 1] = cell
+			coord.put_cell @board, cell
 		end
 
 		def empty_cell?(row:, col:)

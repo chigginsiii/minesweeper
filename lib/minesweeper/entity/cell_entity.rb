@@ -21,6 +21,10 @@ module Minesweeper
 			@revealed 			= false
 		end
 
+		#
+		# XXX: these belong in table.
+		#
+
 		def adjacent_cells
 			@adjacent_cells ||= @table.adjacent_cells(self)
 		end
@@ -29,13 +33,12 @@ module Minesweeper
 			@adjacent_mines ||= adjacent_cells.select {|a_cell| a_cell.mine? }
 		end
 
+		#
+		# state queries
+		#
+
 		def mine?
 			@mine == true
-		end
-
-		def reveal
-			raise Minesweeper::SelectError, 'cannot reveal flagged cell' if flagged?
-			reveal!
 		end
 
 		def reveal!
@@ -51,11 +54,6 @@ module Minesweeper
 			!revealed?
 		end
 
-		def toggle_flag
-			raise Minesweeper::SelectError, 'revealed cell cannot be flagged' if revealed?
-			@flagged = !@flagged
-		end
-
 		def flagged?
 			@flagged == true
 		end
@@ -64,9 +62,27 @@ module Minesweeper
 			!flagged?
 		end
 
+		#
+		# state commands
+		#
+
+		def reveal
+			raise Minesweeper::SelectError, 'cannot reveal flagged cell' if flagged?
+			reveal!
+		end
+
+		def toggle_flag
+			raise Minesweeper::SelectError, 'revealed cell cannot be flagged' if revealed?
+			@flagged = !@flagged
+		end
+
+		# these should be an object
+
 		def coords
 			[row, col]
 		end
+
+		# debug
 
 		def status
 			s = mine? ? 'M' : '-'
