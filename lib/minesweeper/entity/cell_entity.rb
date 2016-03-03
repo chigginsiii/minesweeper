@@ -1,36 +1,20 @@
 module Minesweeper
 	class CellEntity
 		class << self
-			def mine(row:, col:, table:)
-				self.new(mine: true, row: row, col: col, table: table)
+			def mine(point:)
+				self.new(mine: true, point: point)
 			end
 
-			def safe(row:, col:, table:)
-				self.new(row: row, col: col, table: table)
+			def safe(point:)
+				self.new(point: point)
 			end
 		end
 
-		attr_reader :row, :col
-
-		def initialize (row:, col:, table:, mine: false)
-			@table    			= table
-			@row      			= row
-			@col      			= col
+		def initialize (point:, mine: false)
+			@point 					= point
 			@mine     			= mine
 			@flagged  			= false
 			@revealed 			= false
-		end
-
-		#
-		# XXX: these belong in table.
-		#
-
-		def adjacent_cells
-			@adjacent_cells ||= @table.adjacent_cells(self)
-		end
-
-		def adjacent_mines
-			@adjacent_mines ||= adjacent_cells.select {|a_cell| a_cell.mine? }
 		end
 
 		#
@@ -74,12 +58,6 @@ module Minesweeper
 		def toggle_flag
 			raise Minesweeper::SelectError, 'revealed cell cannot be flagged' if revealed?
 			@flagged = !@flagged
-		end
-
-		# these should be an object
-
-		def coords
-			[row, col]
 		end
 
 		# debug

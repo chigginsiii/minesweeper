@@ -1,5 +1,5 @@
 module Minesweeper
-	class CoordEntity
+	class PointEntity
 		attr_accessor :row, :col
 		def initialize(row:, col:)
 			@row = row

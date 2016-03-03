@@ -1,23 +1,23 @@
-RSpec.describe Minesweeper::CoordEntity do
-	let(:coord) { described_class.new row: 3, col: 2 }
+RSpec.describe Minesweeper::PointEntity do
+	let(:point) { described_class.new row: 3, col: 2 }
 	let(:board) { [[1,2,3],[4,5,6],[7,8,9]] }
 
 	describe '#to_s' do
 		it 'renders to string' do
-			expect(coord.to_s).to eq "3:2"
+			expect(point.to_s).to eq "3:2"
 		end
 	end
 
 	describe '#get_cell' do
 		it 'gets a cell from a board' do
-			expect(coord.get_cell board).to eq 8
+			expect(point.get_cell board).to eq 8
 		end
 	end
 
 	describe '#put_cell' do
 		it 'puts a cell on a board' do
-			coord.put_cell board, 'hello'
-			expect(coord.get_cell board).to eq 'hello'
+			point.put_cell board, 'hello'
+			expect(point.get_cell board).to eq 'hello'
 		end
 	end
 end
