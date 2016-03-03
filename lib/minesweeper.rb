@@ -15,7 +15,7 @@ module Minesweeper
 	DefaultCols 	= 12
 	DefaultMines 	= 20
 
-	def new_game(rows: DefaultRows, cols: DefaultCols, mines: DefaultMines)
-		Minesweeper::Game.new(rows: rows, cols: cols, mines: mines)
+	def self.new_game(rows: DefaultRows, cols: DefaultCols, mines: DefaultMines)
+		Minesweeper::GameEntity.new(rows: rows, cols: cols, mines: mines)
 	end
 end

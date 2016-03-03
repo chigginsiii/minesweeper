@@ -2,6 +2,7 @@ module Minesweeper
 	class Error < StandardError
 	end
 
-	class TableError < Error; end
+	class StatusError < Error; end
+	class BoardError < Error; end
 	class SelectError < Error; end
 end

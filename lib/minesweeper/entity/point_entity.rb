@@ -6,6 +6,10 @@ module Minesweeper
 			@col = col
 		end
 
+		def == (arg)
+			self.row == arg.row && self.col == arg.col
+		end
+
 		def to_s
 			"#{@row}:#{col}"
 		end
@@ -19,7 +23,7 @@ module Minesweeper
 		end
 	end
 
-	class PositionEntity
+	class PositionEntity < PointEntity
 		attr_reader :row, :col
 		def initialize(row:, col:, rows:, cols:)
 			@rows = rows

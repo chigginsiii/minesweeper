@@ -34,28 +34,30 @@ module Minesweeper
 				'◼'
 			end
 
-			def cell(c)
-				c.adjacent_mines.count > 0 ? c.adjacent_mines.count : '.'
+			def cell(c, b)
+				mine_count = b.adjacent_mines(c).count 
+				mine_count > 0 ? mine_count : '.'
 			end
 		end
 	end
 
 	class Render
-		attr_reader :game, :table
+		attr_reader :game, :board
 
 		def initialize(game)
 			@game = game
-			@table = game.table
+			@board = game.board
 			# curses hates our escaped ansi color codes. shoot.
 			@cell_render = CellRenderer
 		end
 
 		def draw
 			rows = []
-			(1..table.num_rows).each do |r|
+			(1..board.num_rows).each do |r|
 				row = []
-				(1..table.num_cols).each do |c|
-					row.push render_cell table.get_cell(row: r, col: c)
+				(1..board.num_cols).each do |c|
+					p = PointEntity.new(row: r, col: c)
+					row.push render_cell board.get_cell p
 				end
 				rows.push row.join(' ')
 			end
@@ -72,9 +74,9 @@ module Minesweeper
 			when cell.mine?
 				@cell_render.mine
 			else
-				@cell_render.cell cell
+				@cell_render.cell cell, board
 			end
-			cell.coords == game.position ? "[#{cell_status}]" : " #{cell_status} "
+			cell.point == game.position ? "[#{cell_status}]" : " #{cell_status} "
 		end
 	end
 end

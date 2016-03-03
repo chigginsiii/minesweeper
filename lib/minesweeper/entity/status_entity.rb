@@ -50,6 +50,10 @@ module Minesweeper
 			retval += ":#{@result}" if complete?
 		end
 
+		def to_str
+			to_s
+		end
+
 		private
 
 		def validate_result(result)

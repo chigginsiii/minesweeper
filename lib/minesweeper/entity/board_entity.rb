@@ -42,12 +42,20 @@ module Minesweeper
 			all_cells.select {|c| c.hidden? }
 		end
 
+		def revealed_cells
+			all_cells.select {|c| c.revealed? }
+		end
+
 		def flagged_cells
 			all_cells.select {|c| c.flagged? }
 		end
 
 		def adjacent_cells(cell)
 			adjacent_cell_points(cell).map{|a_cell_point| get_cell(a_cell_point) }
+		end
+
+		def adjacent_mines(cell)
+			adjacent_cells(cell).select {|c| c.mine? }
 		end
 
 		#
@@ -73,7 +81,7 @@ module Minesweeper
 			  .select {|a_cell| a_cell.hidden? }
 			  .each do |this_cell|
 					this_cell.reveal!
-					if this_cell.adjacent_mines.count == 0
+					if adjacent_mines(this_cell).count == 0
 						reveal_adjacent_cells this_cell
 					end
 				end
