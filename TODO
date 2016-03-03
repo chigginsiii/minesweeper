@@ -1,11 +1,13 @@
 TODO
 
-UI:
-- game state: begin, inprog, won, lost
-- status: flags / num_mines
-- color!
+- game_entity => game (it's not an entity)
+- table => board
+- cells => coord
+- render: color?
+- update CLI with new game api
 
-Game:
-- rename _Entity to _, or...
-- make the entities data-only and migrate logic to use-cases
+DONE:
 
+- moved defaults into Minesweeper
+- change defaults in Minesweeper::Game/Board
+- updated game entity with coords/position/status

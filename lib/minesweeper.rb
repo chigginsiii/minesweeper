@@ -8,4 +8,12 @@ require 'minesweeper/entity/cell_entity'
 require 'minesweeper/render'
 
 module Minesweeper
+
+	DefaultRows 	= 10
+	DefaultCols 	= 12
+	DefaultMines 	= 20
+
+	def new_game(rows: DefaultRows, cols: DefaultCols, mines: DefaultMines)
+		Minesweeper::Game.new(rows: rows, cols: cols, mines: mines)
+	end
 end
