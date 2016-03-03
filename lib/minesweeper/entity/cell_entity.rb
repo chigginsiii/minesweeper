@@ -1,5 +1,9 @@
 module Minesweeper
 	class CellEntity
+		extend Forwardable
+		attr_accessor :point
+		def_delegators :@point, :row, :col
+
 		class << self
 			def mine(point:)
 				self.new(mine: true, point: point)
