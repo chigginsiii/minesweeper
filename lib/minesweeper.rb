@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'paint'
 
 require 'minesweeper/errors'
 require 'minesweeper/entity/game_entity'

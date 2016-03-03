@@ -50,5 +50,12 @@ RSpec.describe Minesweeper::TableEntity do
 				expect(adjacent_cells.length).to eq 3
 			end
 		end
-	end
+
+		# context 'testing' do
+		# 	let(:cell) { table.get_cell(col: 5, row: 4) }
+		# 	it 'dumps' do
+		# 		pp adjacent_cells
+		# 	end
+		# end
+ 	end
 end

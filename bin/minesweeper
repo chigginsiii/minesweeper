@@ -1,0 +1,80 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'dispel'
+require 'highline'
+require 'minesweeper'
+
+@board_rows  = Minesweeper::GameEntity::DefaultRows
+@board_cols  = Minesweeper::GameEntity::DefaultCols
+@board_mines = Minesweeper::GameEntity::DefaultMines
+
+def return_num(val)
+  num = val.to_i
+  (!num.nil? && num > 0) ? num : 0
+end
+
+def setup
+	cli = HighLine.new
+	cli.choose do |menu|
+		menu.prompt = "Setup board => rows: #{@board_rows}, cols: #{@board_cols}, mines: #{@board_mines}"
+		menu.choice(:rows) do
+		  rows = return_num cli.ask("Number of rows: ")
+		  @board_rows = rows if rows > 0
+		  setup
+		end
+		menu.choice(:cols) do
+		  cols = return_num cli.ask("Number of cols: ")
+		  @board_cols = cols if cols > 0
+		  setup
+		end
+		menu.choice(:mines) do
+		  mines = return_num cli.ask("Number of mines: ")
+		  @board_mines = mines if mines > 0
+		  setup
+		end
+		menu.choice(:start) { setup_game }
+	end
+end
+
+def setup_game
+	@game = Minesweeper::GameEntity.new(rows: @board_rows, cols: @board_cols, mines: @board_mines)
+end
+
+def start_game
+	Dispel::Screen.open do |screen|
+		screen.draw draw(@game)
+
+		Dispel::Keyboard.output do |key|
+			case key
+			# move selection
+			when :up
+				@game.move :up
+			when :down
+				@game.move :down
+			when :left
+				@game.move :left
+			when :right
+				@game.move :right
+			# actions
+			when 'f'
+				@game.toggle_flag
+			when 's'
+				@game.reveal_cell
+			when 'q'
+				break
+			when 'r'
+				setup_game
+			end
+			screen.draw draw(@game)
+		end
+	end
+end
+
+def draw(game)
+	[*(game.draw), "position: #{@game.position}", "last action: #{@game.last_action}", "status: #{@game.status}", "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit." ].join("\n")
+end
+
+setup
+start_game
+

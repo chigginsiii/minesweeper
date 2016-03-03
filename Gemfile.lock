@@ -2,7 +2,10 @@ GEM
   remote: https://rubygems.org/
   specs:
     coderay (1.1.0)
+    curses (1.0.1)
     diff-lcs (1.2.5)
+    dispel (0.0.7)
+      curses
     ffi (1.9.10)
     formatador (0.2.5)
     guard (2.13.0)
@@ -19,6 +22,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    highline (1.7.8)
     listen (3.0.5)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -28,6 +32,7 @@ GEM
     notiffany (0.0.8)
       nenv (~> 0.1)
       shellany (~> 0.0)
+    paint (1.0.1)
     pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -56,7 +61,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dispel
   guard-rspec (~> 4.6.4)
+  highline
+  paint
   rspec (~> 3.4.0)
 
 BUNDLED WITH

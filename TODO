@@ -1,61 +1,11 @@
 TODO
 
-* use cases: game = Minesweeper.new(rows, cols, mines)
+UI:
+- game state: begin, inprog, won, lost
+- status: flags / num_mines
+- color!
 
-	- generate new game 
-	X (perhaps change "board" to "game")
+Game:
+- rename _Entity to _, or...
+- make the entities data-only and migrate logic to use-cases
 
-	- flag cell: game.flag(r, c, callbacks)
-		- flagged/unflagged: toggle state
-
-	- reveal cell:
-		- flagged: do nothing
-		- is mine: boom
-		- is not-touching: recursive reveal
-		- is touching: reveal
-
-	- game state:
-		- game_status: new, running, won, lost
-		- mines total / mines - flags out
-		- board (draw): to spec, with rows / cols drawn
-
-	- hook up to cmd line client:
-		- start menu: q -> quit, space -> start
-			- start: draw board, show mines/remains, menu:
-				LOOP:
-				- f(lag) [row] [col]
-				- r(eveal) [row] [col]
-				- q(uit)
-				=> execute command
-				=> update table
-				=> draw board
-				WON: display WON! space / q
-				LOST: reveal whole board, space / q
-				CONTINUE:
-				=> continue LOOP
-
-DONE: 
-
-* key method: adjacent_cells()
-	- Enumerable that takes a coord and turns it into:
-	  top-left, top-center, top-right
-	  left, right
-	  bottom-left, bottom-right, bottom-center
-	  r-1:c-1 r-1:c r-1:c+1
-	  r:c-1         r:c+1
-	  r+1:c-1 r+1:c r+1:c+1
-
-* cell states:
-
-- init:
-	- revealed: false
-	- flagged: false
-	- transittion to: flagged, revealed
-- flagged:
-	- revealed: false
-	- flagged: true
-	- transitions: unflagged
-- revealed:
-  - revealed: true
-  - flagged: false
-  - transitions: TERMINAL
