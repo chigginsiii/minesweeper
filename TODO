@@ -1,5 +1,11 @@
 TODO
 
-- render: color?
+- board, game: complete unit testing
+- render: color
 
-DONE:
+- SOLVER:
+	solver = Minesweeper::Solver.new( games: 100 )
+	solver.play
+	solver.stats
+	
+

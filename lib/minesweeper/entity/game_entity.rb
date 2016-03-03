@@ -2,28 +2,18 @@ module Minesweeper
 	class GameEntity
 		extend Forwardable
 
-		attr_reader :board, :status, :renderer, :position
+		attr_reader :board, :status, :renderer, :position, :stats
 
 		def_delegators :@board, :num_rows, :num_cols, :num_mines, :flagged_cells  
 		def_delegators :@renderer, :draw
-
-		#
-		# set_status  -> real game status
-		# command dispatch:, gather common housekeeping functions, call use_cases
-		# what are the real game states? start with: [inprog, won, lost]
-		# 
-		# api: game.status in [ in_progress, complete ]
-		# 		 game.result in [ won, lost ]
-		# 		 game.board (fka: board)
-		#
 
 		def initialize (rows:, cols:, mines:)
 			@position = PositionEntity.new(row: 1, col: 1, rows: rows, cols: cols)
 			@board 		= BoardEntity.new(rows, cols, mines)
 			@renderer = Render.new(self)
 			@status 	= StatusEntity.new
-
-			status.begin
+			@stats    = StatsEntity.new(self)
+			write_flash_msg "Good Luck!"
 		end
 
 		def dispatch_action(action, *opts)
@@ -37,7 +27,6 @@ module Minesweeper
 			when :reveal
 				reveal_cell
 			end
-
 			check_for_winner
 		end
 
@@ -55,14 +44,8 @@ module Minesweeper
 
 		def check_for_winner
 			return if status.lost?
-			all_cells = board.all_cells.count
-			revealed_cells = board.revealed_cells.count
-			num_mines = board.num_mines
-
-			write_flash_msg "all: #{all_cells} revealed: #{revealed_cells} mines: #{num_mines}"
-
 			# num mines should equal total cells minus total hidden
-			if all_cells == revealed_cells + num_mines
+			if stats.cells_total == stats.cells_revealed + stats.mines
 				status.complete :won
 				write_flash_msg "YOU WON!"
 			end
@@ -96,7 +79,7 @@ module Minesweeper
 			if cell.mine?
 				status.complete :lost
 				write_flash_msg "YOU LOSE!"
-				board.reveal_all_cells
+				@renderer = RenderHidden.new(self)
 			else
 				if board.adjacent_mines(cell).count == 0
 					board.reveal_adjacent_cells cell

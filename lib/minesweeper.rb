@@ -3,6 +3,7 @@ require 'paint'
 
 require 'minesweeper/errors'
 require 'minesweeper/entity/point_entity'
+require 'minesweeper/entity/stats_entity'
 require 'minesweeper/entity/status_entity'
 require 'minesweeper/entity/game_entity'
 require 'minesweeper/entity/board_entity'

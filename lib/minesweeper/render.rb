@@ -64,7 +64,7 @@ module Minesweeper
 			rows.join("\n")
 		end
 
-		# XXX: refactor for dep inject once conditions are clearly defined
+		# XXX: refactor once conditions are clearly defined
 		def render_cell(cell)
 			cell_status = case
 			when cell.flagged?
@@ -77,6 +77,18 @@ module Minesweeper
 				@cell_render.cell cell, board
 			end
 			cell.point == game.position ? "[#{cell_status}]" : " #{cell_status} "
+		end
+	end
+
+	class RenderHidden < Render
+		def render_cell(cell)
+			cell_status = case
+			when cell.mine?
+				@cell_render.mine
+			else
+				@cell_render.cell cell, board
+			end
+			" #{cell_status} "
 		end
 	end
 end

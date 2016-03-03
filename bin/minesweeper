@@ -43,7 +43,7 @@ end
 
 def start_game
 	Dispel::Screen.open do |screen|
-		screen.draw draw(@game)
+		screen.draw view
 
 		Dispel::Keyboard.output do |key|
 			case key
@@ -60,13 +60,17 @@ def start_game
 			when 'r'
 				setup_game
 			end
-			screen.draw draw(@game)
+			screen.draw view
 		end
 	end
 end
 
-def draw(game)
-	[*(game.draw), "position: #{@game.position}", "status: #{@game.status}", "msg: #{game.read_flash_msg}", "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit." ].join("\n")
+def view
+	lines = [*(@game.draw), "#{@game.stats}"]
+	flash = @game.read_flash_msg
+	lines << flash ? flash : ''
+	lines << "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit."
+  lines.join("\n")
 end
 
 setup

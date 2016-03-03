@@ -3,17 +3,13 @@ module Minesweeper
 		attr_accessor :state, :result
 
 		def initialize
-			@state  = :initial
+			@state  = :in_progress
 			@result = :incomplete
 		end
 
 		#
 		# command
 		#
-
-		def begin
-			@state = :in_progress
-		end
 
 		def complete(result)
 			validate_result result
@@ -46,8 +42,9 @@ module Minesweeper
 		#
 
 		def to_s
-			retval = @state.to_s
+			retval = "#{@state}"
 			retval += ":#{@result}" if complete?
+			retval
 		end
 
 		def to_str
