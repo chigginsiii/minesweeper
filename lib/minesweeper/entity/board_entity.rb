@@ -142,7 +142,7 @@ module Minesweeper
 		end
 
 		#
-		# table setup
+		# board setup
 		#
 
 		def setup

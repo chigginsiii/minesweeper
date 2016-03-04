@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+
+require 'minesweeper'
+require 'benchsweeper'
+
+NumGames = 50
+
+NumRows = 10
+NumCols = 10
+NumMines = 10
+
+num_wins = 0
+times    = []
+
+# timer here...
+
+(1..NumGames).each do |i|
+	game = Minesweeper.new_game(rows: NumRows, cols: NumCols, mines: NumMines)
+	solver = Benchsweeper.solver(game)
+
+	t0 = Time.now
+	until game.complete?
+		[
+			:fill_in_blocks,
+			:fill_in_flag_blocks,
+			:pick_random_adjacent,
+			:pick_random
+		].each do |technique|
+		  num_changed = solver.send technique
+			next if num_changed > 0
+			break if solver.complete?
+		end
+	end
+
+	# record result/timing, next game
+	num_wins += 1 if game.won?
+	times.push (Time.now - t0)
+end
+

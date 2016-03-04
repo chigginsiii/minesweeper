@@ -1,25 +1,4 @@
 module Minesweeper
-
-	class ColorCellRenderer
-		class << self
-			def flag
-				Paint['F', :red]
-			end
-
-			def mine
-				Paint['M', :bright, :red]
-			end
-
-			def hidden
-				Paint['◼', :white]
-			end
-
-			def cell(c)
-				cell.adjacent_mines.count > 0 ? Paint[cell.adjacent_mines.count, :blue, :bright] : '.'
-			end
-		end
-	end
-
 	class CellRenderer
 		class << self
 			def flag
@@ -44,10 +23,12 @@ module Minesweeper
 	class Render
 		attr_reader :game, :board
 
+		ColSeparator = ' '
+
 		def initialize(game)
+			# this should probably take a game or a board?
 			@game = game
 			@board = game.board
-			# curses hates our escaped ansi color codes. shoot.
 			@cell_render = CellRenderer
 		end
 
@@ -59,14 +40,23 @@ module Minesweeper
 					p = PointEntity.new(row: r, col: c)
 					row.push render_cell board.get_cell p
 				end
-				rows.push row.join(' ')
+				rows.push row.join(ColSeparator)
 			end
 			rows.join("\n")
 		end
 
-		# XXX: refactor once conditions are clearly defined
+		private
+
+		#
+		# XXX: these could be moved into CellRenderer, same for Hidden/Array
+		#
+
 		def render_cell(cell)
-			cell_status = case
+			cell.point == game.position ? "[#{cell_status}]" : " #{cell_status} "
+		end
+
+		def cell_status(cell)
+			case
 			when cell.flagged?
 				@cell_render.flag
 			when cell.hidden?
@@ -76,19 +66,31 @@ module Minesweeper
 			else
 				@cell_render.cell cell, board
 			end
-			cell.point == game.position ? "[#{cell_status}]" : " #{cell_status} "
 		end
 	end
 
 	class RenderHidden < Render
 		def render_cell(cell)
-			cell_status = case
+			" #{cell_status} "
+		end
+
+		def cell_status(cell)
+			case
 			when cell.mine?
 				@cell_render.mine
 			else
 				@cell_render.cell cell, board
 			end
-			" #{cell_status} "
+		end
+	end
+
+	# take the board.board, sub out for text
+	# XXX: dry this up once abstraction is clear.
+	class RenderArray < Render
+		ColSeparator = ''
+
+		def render_cell(cell)
+			cell_status cell
 		end
 	end
 end

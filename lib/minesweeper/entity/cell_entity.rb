@@ -26,6 +26,7 @@ module Minesweeper
 		#
 
 		def mine?
+			# return nil until revealed?
 			@mine == true
 		end
 

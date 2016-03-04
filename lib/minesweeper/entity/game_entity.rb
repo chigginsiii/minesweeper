@@ -2,10 +2,22 @@ module Minesweeper
 	class GameEntity
 		extend Forwardable
 
+		#
+		# lotsa things to refactor here, "entity" has been stretched.
+		# most of the commands would be better migrated to use-cases,
+		# and 'Game' is closer to an gateway/controller by now.
+		#
+		# Additionallly, concepts list 'position' and 'move' are cursor concepts,
+		# they belong in a UI class to wire the game's API to a terminal client.
+		#
+		# but what the hell, the glue's gotta go somewhere. today it goes here.
+		#
+
 		attr_reader :board, :status, :renderer, :position, :stats
 
 		def_delegators :@board, :num_rows, :num_cols, :num_mines, :flagged_cells  
 		def_delegators :@renderer, :draw
+		def_delegators :@status, :complete?, :in_progress?, :won?, :lost?, :complete
 
 		def initialize (rows:, cols:, mines:)
 			@position = PositionEntity.new(row: 1, col: 1, rows: rows, cols: cols)
@@ -38,6 +50,10 @@ module Minesweeper
 			retval = @flash_message
 			@flash_message = ''
 			retval
+		end
+
+		def flat_board
+			Minesweeper::RenderArray.new(self).draw
 		end
 
 		private
