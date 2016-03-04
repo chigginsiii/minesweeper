@@ -86,7 +86,7 @@ module Minesweeper
 
 	# take the board.board, sub out for text
 	# XXX: dry this up once abstraction is clear.
-	class RenderArray < Render
+	class RenderFlat < Render
 		ColSeparator = ''
 
 		def render_cell(cell)

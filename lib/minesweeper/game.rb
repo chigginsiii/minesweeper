@@ -1,16 +1,10 @@
 module Minesweeper
-	class GameEntity
+	class Game
 		extend Forwardable
 
 		#
-		# lotsa things to refactor here, "entity" has been stretched.
-		# most of the commands would be better migrated to use-cases,
-		# and 'Game' is closer to an gateway/controller by now.
-		#
-		# Additionallly, concepts list 'position' and 'move' are cursor concepts,
+		# XXX: concepts list 'position' and 'move' are cursor concepts,
 		# they belong in a UI class to wire the game's API to a terminal client.
-		#
-		# but what the hell, the glue's gotta go somewhere. today it goes here.
 		#
 
 		attr_reader :board, :status, :renderer, :position, :stats
@@ -27,6 +21,10 @@ module Minesweeper
 			@stats    = StatsEntity.new(self)
 			write_flash_msg "Good Luck!"
 		end
+
+		#
+		# XXX: extract to UI class
+		#
 
 		def dispatch_action(action, *opts)
 			return if status.complete?
@@ -53,7 +51,7 @@ module Minesweeper
 		end
 
 		def flat_board
-			Minesweeper::RenderArray.new(self).draw
+			Minesweeper::RenderFlat.new(self).draw
 		end
 
 		private
@@ -67,11 +65,14 @@ module Minesweeper
 			end
 		end
 
+		#
+		# XXX: these are mostly coupled to terminal UI responsibilities
+		# and need to have UI elements extracted from game API.
+		#
+
 		def move(dir)
 			position.send(dir)
 		end
-
-		# use case. yep.
 
 		def toggle_flag
 			cell = board.get_cell(position)
