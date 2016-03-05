@@ -1,6 +1,7 @@
 require 'rspec'
 require 'pp'
 require 'minesweeper'
+require 'benchsweeper'
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
