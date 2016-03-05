@@ -3,13 +3,25 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'minesweeper'
 require 'benchsweeper'
+
+require 'highline'
 require 'progress_bar'
 
-NumGames = 100
+#
+# Setup
+#
 
-NumRows = 10
-NumCols = 10
-NumMines = 10
+cli = HighLine.new
+
+DefaultGames = 100
+DefaultRows  = 10
+DefaultCols  = 10
+DefaultMines = 10
+
+NumGames = cli.ask("Number of games [#{DefaultGames}]: ", Integer) {|q| q.default = DefaultGames }
+NumRows  = cli.ask("Number of rows [#{DefaultRows}]: ",  Integer) {|q| q.default = DefaultRows  }
+NumCols  = cli.ask("Number of cols [#{DefaultCols}]: ",  Integer) {|q| q.default = DefaultCols  }
+NumMines = cli.ask("Number of mines [#{DefaultMines}]: ", Integer) {|q| q.default = DefaultMines }
 
 num_wins = 0
 times    = []
