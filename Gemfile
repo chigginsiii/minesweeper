@@ -2,6 +2,7 @@ ruby '2.1.2'
 
 source 'https://rubygems.org'
 
+gem 'trollop'
 gem 'progress_bar'
 gem 'highline'
 gem 'dispel'

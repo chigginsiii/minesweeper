@@ -11,20 +11,17 @@ require 'progress_bar'
 # Setup
 #
 
-cli = HighLine.new
+config = Benchsweeper::CLI.configure
 
-DefaultGames = 100
-DefaultRows  = 10
-DefaultCols  = 10
-DefaultMines = 10
-
-NumGames = cli.ask("Number of games [#{DefaultGames}]: ", Integer) {|q| q.default = DefaultGames }
-NumRows  = cli.ask("Number of rows [#{DefaultRows}]: ",  Integer) {|q| q.default = DefaultRows  }
-NumCols  = cli.ask("Number of cols [#{DefaultCols}]: ",  Integer) {|q| q.default = DefaultCols  }
-NumMines = cli.ask("Number of mines [#{DefaultMines}]: ", Integer) {|q| q.default = DefaultMines }
+NumGames = config.games
+NumRows  = config.rows
+NumCols  = config.cols
+NumMines = config.mines
 
 num_wins = 0
 times    = []
+
+puts "#{config}\n"
 
 bar = ProgressBar.new(NumGames)
 
@@ -52,16 +49,16 @@ bar = ProgressBar.new(NumGames)
   num_wins += 1 if game.won?
 
 
-	bar.increment!
+	bar.increment! unless config.boards
 
 	# would be cool to partition the times on won/lost, then get min/max/avg.
 
-	# DEBUG: wanna see the boards?
-	#
-	#	puts "\n#{game.flat_board}"
-	#	puts "#{game.status}"
-	# puts "#{num_wins}/#{i} in #{times.last}"
-	#	puts
+	if config.boards
+		puts "\n#{game.flat_board}"
+		puts "#{game.status}"
+		puts "#{num_wins}/#{i} in #{times.last}"
+		puts "#{config.cols.times{'-'}}"
+	end
 end
 
 
