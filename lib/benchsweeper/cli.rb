@@ -35,10 +35,10 @@ module Benchsweeper
 			configure_options @opts[:interactive] ? true : false
 		end
 
-		def configure_options(interactive: false)
+		def configure_options(interactive = false)
 			option_source = interactive ? ->(k){prompt_for_value(k)} : ->(k){@opts[k]}
 			[:games, :rows, :cols, :mines, :boards].each do |option_key|
-				set_instance_variable option_key, option_source.call(option_key)
+				instance_variable_set "@#{option_key}".to_sym, option_source.call(option_key)
 			end
 		end
 

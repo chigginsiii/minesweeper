@@ -31,11 +31,10 @@ Options:
 ### Interactive setup:
 
 ```
-1. rows
-2. cols
-3. mines
-4. start
-Setup board => rows: 10, cols: 12, mines: 20
+/minesweeper[master *%=]:: bin/minesweeper -i
+Number of rows [12]: 13
+Number of cols [10]:
+Number of mines [20]: 25
 ```
 
 After that, you can play that board over and over again.
