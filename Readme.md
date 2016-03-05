@@ -14,7 +14,7 @@ An implementation of Minesweeper in Ruby.
 to start:
 
 ```
-bin/minesweeper
+> bin/minesweeper
 ```
 
 ### Options:
@@ -31,7 +31,7 @@ Options:
 ### Interactive setup:
 
 ```
-/minesweeper[master *%=]:: bin/minesweeper -i
+> bin/minesweeper -i
 Number of rows [12]: 13
 Number of cols [10]:
 Number of mines [20]: 25
@@ -59,7 +59,7 @@ Tactics 1 and 2 are the most reliable, 3 is the least risky, and 4 is what it is
 ## Use
 
 ```
-bin/benchsweeper
+> bin/benchsweeper
 ```
 
 ### benchsweeper options:
