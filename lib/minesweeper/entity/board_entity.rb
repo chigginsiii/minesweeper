@@ -130,19 +130,19 @@ module Minesweeper
 		end
 
 		def validate_rows
-			raise Minesweeper::TableError, "invalid number of rows (#{@num_rows})" unless @num_rows && @num_rows > 0 && @num_rows <= MaxRows
+			raise Minesweeper::BoardError, "invalid number of rows (#{@num_rows})" unless @num_rows && @num_rows > 0 && @num_rows <= MaxRows
 		end
 
 		def validate_cols
-			raise Minesweeper::TableError,  "invalid number of cols (#{@num_cols})" unless @num_cols && @num_cols > 0 && @num_cols <= MaxCols
+			raise Minesweeper::BoardError,  "invalid number of cols (#{@num_cols})" unless @num_cols && @num_cols > 0 && @num_cols <= MaxCols
 		end
 
 		def validate_mines
-			raise Minesweeper::TableError, "invalid number of mines (#{@num_mines})" unless @num_mines && @num_mines <= @num_rows * @num_cols
+			raise Minesweeper::BoardError, "invalid number of mines (#{@num_mines})" unless @num_mines && @num_mines <= @num_rows * @num_cols
 		end
 
 		#
-		# table setup
+		# board setup
 		#
 
 		def setup

@@ -18,12 +18,12 @@ module Minesweeper
 		end
 
 		def mines
-			game.board.num_mines
+			game.board.num_mines.to_i
 		end
 
 		def to_s
 			if game.status.in_progress?
-				"mines/flags: #{mines}/#{cells_flagged}"
+				"revealed/mines/total: #{cells_revealed}/#{mines}/#{cells_total}"
 			elsif game.status.won?
 				"WINNER!"
 			else
