@@ -43,5 +43,23 @@ module Benchsweeper
 		def coords
 			"#{row}:#{col}"
 		end
+
+		# position helpers
+
+		def up
+			row - 1
+		end
+
+		def down
+			row + 1
+		end
+
+		def left
+			col - 1
+		end
+
+		def right
+			col + 1
+		end
 	end
 end

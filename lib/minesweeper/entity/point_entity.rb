@@ -28,8 +28,7 @@ module Minesweeper
 		def initialize(row:, col:, rows:, cols:)
 			@rows = rows
 			@cols = cols
-			@row  = row
-			@col  = col
+			super(row: row, col: col)
 		end
 
 		def up 

@@ -1,44 +1,84 @@
 module Minesweeper
+
+	#
+	# Cell Renderers
+	#
+
 	class CellRenderer
-		class << self
-			def flag
-				'F'
-			end
+		attr_reader :cell, :board
+		def initialize(cell, board)
+			@cell  = cell
+			@board = board
+		end
 
-			def mine
-				'M'
-			end
+		def self.render(cell, board)
+			new(cell,board).render
+		end
 
-			def hidden
-				'◼'
+		def render
+			case
+			when cell.flagged?
+				flag
+			when cell.hidden?
+				hidden
+			when cell.mine?
+				mine
+			else
+				mines_touching
 			end
+		end
 
-			def cell(c, b)
-				mine_count = b.adjacent_mines(c).count 
-				mine_count > 0 ? mine_count : '.'
+		private
+
+		def flag
+			'F'
+		end
+
+		def mine
+			'M'
+		end
+
+		def hidden
+			'◼'
+		end
+
+		def mines_touching
+			mine_count = board.adjacent_mines(cell).count
+			mine_count > 0 ? mine_count : '.'
+		end
+	end
+
+	class HiddenCellRenderer < CellRenderer
+		def render
+			case
+			when cell.mine?
+				mine
+			else
+				mines_touching
 			end
 		end
 	end
 
+	#
+	# Board Renderers
+	#
+
 	class Render
 		attr_reader :game, :board
-
-		ColSeparator = ' '
+		ColSeparator = ''
 
 		def initialize(game)
-			# this should probably take a game or a board?
 			@game = game
 			@board = game.board
-			@cell_render = CellRenderer
+			@cell_renderer = CellRenderer
 		end
 
 		def draw
 			rows = []
-			(1..board.num_rows).each do |r|
+			(1..game.num_rows).each do |r|
 				row = []
-				(1..board.num_cols).each do |c|
-					p = PointEntity.new(row: r, col: c)
-					row.push render_cell board.get_cell p
+				(1..game.num_cols).each do |c|
+					row << draw_cell( get_cell(r,c) )
 				end
 				rows.push row.join(ColSeparator)
 			end
@@ -47,47 +87,39 @@ module Minesweeper
 
 		private
 
-		def render_cell(cell)
-			cell.point == game.position ? "[#{cell_status(cell)}]" : " #{cell_status(cell)} "
+		def get_cell(r, c)
+			board.get_cell PointEntity.new(row: r, col: c)
 		end
 
-		def cell_status(cell)
-			case
-			when cell.flagged?
-				@cell_render.flag
-			when cell.hidden?
-				@cell_render.hidden
-			when cell.mine?
-				@cell_render.mine
-			else
-				@cell_render.cell cell, board
-			end
+		def draw_cell(cell)
+			rendered = @cell_renderer.render cell, board
+			" #{rendered} "
 		end
 	end
 
-	class RenderHidden < Render
-		def render_cell(cell)
-			" #{cell_status(cell)} "
+	class RenderTerminal < Render
+		attr_reader :position
+		ColSeparator = ' '
+
+		def initialize(game, position)
+			super(game)
+			@position = position
 		end
 
-		def cell_status(cell)
-			case
-			when cell.mine?
-				@cell_render.mine
-			else
-				@cell_render.cell cell, board
-			end
+		def draw_cell(cell)
+			basic_cell = super
+			cell.point == position ? "[#{basic_cell}]" : " #{basic_cell} "
 		end
 	end
 
-	# take the board.board, sub out for text
-	# XXX: dry this up once abstraction is clear.
-	class RenderFlat < Render
-		ColSeparator = ''
+	class RenderTerminalHidden < RenderTerminal
+		def initialize(game, position)
+			super
+			@cell_renderer = HiddenCellRenderer
+		end
 
-		def render_cell(cell)
-			cell_status cell
+		def draw_cell(cell)
+			super.gsub(/[\[\]]/, ' ')
 		end
 	end
 end
-

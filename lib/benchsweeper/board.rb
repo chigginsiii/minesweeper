@@ -7,9 +7,9 @@ module Benchsweeper
 			setup
 		end
 
-		def board
-			@board ||= []
-		end
+		#
+		# cell scopes
+		#
 
 		def all_cells
 			board.flatten
@@ -23,6 +23,10 @@ module Benchsweeper
 			all_cells.select {|c| c.revealed? }
 		end
 
+		#
+		# find cell, that cell's adjacent cells
+		#
+
 		def get_cell(row, col)
 			return unless valid_row_col row, col
 			board[row - 1][col - 1]
@@ -30,8 +34,8 @@ module Benchsweeper
 
 		def adjacent_cells(cell)
 			adjacent = []
-			[cell.row - 1, cell.row, cell.row + 1].each do |r|
-				[cell.col - 1, cell.col, cell.col + 1].each do |c|
+			[cell.up, cell.row, cell.down].each do |r|
+				[cell.left, cell.col, cell.right].each do |c|
 					next if cell.row == r && cell.col == c
 					next unless a_cell = get_cell(r, c)
 					adjacent << a_cell
@@ -41,6 +45,10 @@ module Benchsweeper
 		end
 
 		private
+
+		def board
+			@board ||= []
+		end
 
 		def setup
 			game.flat_board.split("\n").each_with_index do |row, row_i|

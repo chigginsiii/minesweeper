@@ -15,7 +15,7 @@ def setup
 end
 
 def setup_game
-	@game = Minesweeper.new_game(rows: @opts.rows, cols: @opts.cols, mines: @opts.mines)
+	@game = Minesweeper::Terminal.new_game(rows: @opts.rows, cols: @opts.cols, mines: @opts.mines)
 end
 
 def start_game

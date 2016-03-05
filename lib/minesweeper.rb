@@ -11,6 +11,7 @@ require 'minesweeper/entity/cell_entity'
 require 'minesweeper/game'
 require 'minesweeper/render'
 require 'minesweeper/cli'
+require 'minesweeper/terminal'
 
 module Minesweeper
 
