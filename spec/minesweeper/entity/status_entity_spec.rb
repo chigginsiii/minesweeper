@@ -30,7 +30,7 @@ RSpec.describe Minesweeper::StatusEntity do
 		end
 		context 'when unknown' do
 			it 'complains' do
-				expect { status.complete :foo }.to raise_error
+				expect { status.complete :foo }.to raise_error Minesweeper::StatusError
 			end
 		end
 	end
