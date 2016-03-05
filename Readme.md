@@ -2,12 +2,14 @@
 
 An implementation of Minesweeper in Ruby. 
 
-## install
+## Install
 
-- clone this repo
-- bundle
+```
+> https://github.com/chigginsiii/minesweeper.git
+> bundle
+```
 
-## play
+## Play
 
 to start:
 

@@ -4,3 +4,15 @@
 
 - trollop/highline cli module for minesweeper
 - minesweeper interactive setup: 5. quit
+
+- TESTS: Benchsweeper must have some coverage around at least public methods to prepare for refactoring
+- TESTS: Minesweeper went through significant updates/additions and needs tests everywhere
+
+- Minesweeper Refactor: 
+	- Render classes:
+	  - are prepared for abstraction/refactor
+		- make cell renderer more encapsulated
+	- Game:
+	  - extract terminal UI concerns
+	  - update bin/minesweeper to use UI API
+	
