@@ -11,12 +11,6 @@ module Benchsweeper
 		def complete?
 			game.complete?
 		end
-
-		# guarantees a new board each 
-		def update_board
-			@board = Board.new game
-		end
-
 		#
 		# each of these solver methods returns true if cells
 		# have been changed, false if they have not.
@@ -106,17 +100,11 @@ module Benchsweeper
 		end
 
 		private
+
+		# guarantees a new board each 
+		def update_board
+			@board = Board.new game
+		end
+
 	end
 end
-
-=begin
-PICKING A SQUARE
-- to GAME: "need a board with cells, represented perhaps as an array of arrays?"
-- ME: iterate over squares, selecting those that meet criteria
-- to GAME:
-  - select position (r, c)
-  - flag position (r, c)
-- to GAME: 'complete?'
-	  Y -> this one is over, record result and do it again
-	  N -> not complete, return
-=end
