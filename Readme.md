@@ -5,7 +5,8 @@ An implementation of Minesweeper in Ruby.
 ## Install
 
 ```
-> https://github.com/chigginsiii/minesweeper.git
+> git clone https://github.com/chigginsiii/minesweeper.git
+> cd minesweeper
 > bundle
 ```
 
