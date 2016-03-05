@@ -48,7 +48,7 @@ module Minesweeper
 		private
 
 		def render_cell(cell)
-			cell.point == game.position ? "[#{cell_status}]" : " #{cell_status} "
+			cell.point == game.position ? "[#{cell_status(cell)}]" : " #{cell_status(cell)} "
 		end
 
 		def cell_status(cell)
@@ -67,7 +67,7 @@ module Minesweeper
 
 	class RenderHidden < Render
 		def render_cell(cell)
-			" #{cell_status} "
+			" #{cell_status(cell)} "
 		end
 
 		def cell_status(cell)
