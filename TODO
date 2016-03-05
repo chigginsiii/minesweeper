@@ -2,7 +2,7 @@
 - go through all of it, and make a new TODO list.
 
 
-- trollop/highline cli module for minesweeper
+x trollop/highline cli module for minesweeper
 - minesweeper interactive setup: 5. quit
 
 - TESTS: Benchsweeper must have some coverage around at least public methods to prepare for refactoring
@@ -15,4 +15,3 @@
 	- Game:
 	  - extract terminal UI concerns
 	  - update bin/minesweeper to use UI API
-	

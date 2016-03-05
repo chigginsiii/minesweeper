@@ -2,12 +2,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'dispel'
-require 'highline'
 require 'minesweeper'
-
-@board_rows  = Minesweeper::DefaultRows
-@board_cols  = Minesweeper::DefaultCols
-@board_mines = Minesweeper::DefaultMines
 
 def return_num(val)
   num = val.to_i
@@ -15,30 +10,12 @@ def return_num(val)
 end
 
 def setup
-	cli = HighLine.new
-	cli.choose do |menu|
-		menu.prompt = "Setup board => rows: #{@board_rows}, cols: #{@board_cols}, mines: #{@board_mines}"
-		menu.choice(:rows) do
-		  rows = return_num cli.ask("Number of rows: ")
-		  @board_rows = rows if rows > 0
-		  setup
-		end
-		menu.choice(:cols) do
-		  cols = return_num cli.ask("Number of cols: ")
-		  @board_cols = cols if cols > 0
-		  setup
-		end
-		menu.choice(:mines) do
-		  mines = return_num cli.ask("Number of mines: ")
-		  @board_mines = mines if mines > 0
-		  setup
-		end
-		menu.choice(:start) { setup_game }
-	end
+	@opts = Minesweeper::CLI.configure
+	setup_game
 end
 
 def setup_game
-	@game = Minesweeper.new_game(rows: @board_rows, cols: @board_cols, mines: @board_mines)
+	@game = Minesweeper.new_game(rows: @opts.rows, cols: @opts.cols, mines: @opts.mines)
 end
 
 def start_game

@@ -21,6 +21,8 @@ module Benchsweeper
 			"Running #{games} games on a #{rows} x #{cols} board with #{mines} mines"
 		end
 
+		private
+
 		def parse_options
 			@opts = Trollop::options do
 				opt :games,       "Number of games to run", 					short: '-g', default: Defaults[:games]
@@ -30,24 +32,19 @@ module Benchsweeper
 				opt :boards,      "output board results",             short: '-b', default: false
 				opt :interactive, "Set up games/board interactively", short: '-i', default: false
 			end
+			configure_options @opts[:interactive] ? true : false
+		end
 
-			if @opts[:interactive]
-				configure_interactive
-			else
-				@games  = @opts[:games]
-				@rows   = @opts[:rows]
-				@cols   = @opts[:cols]
-				@mines  = @opts[:mines]
-				@boards = @opts[:boards]
+		def configure_options(interactive: false)
+			option_source = interactive ? ->(k){prompt_for_value(k)} : ->(k){@opts[k]}
+			[:games, :rows, :cols, :mines, :boards].each do |option_key|
+				set_instance_variable option_key, option_source.call(option_key)
 			end
 		end
 
-		def configure_interactive
-			cli = HighLine.new
-			@games = cli.ask("Number of games [#{Defaults[:games]}]: ", Integer) {|q| q.default = Defaults[:games] }
-			@rows  = cli.ask("Number of rows [#{Defaults[:rows]}]: ", Integer)   {|q| q.default = Defaults[:rows]  }
-			@cols  = cli.ask("Number of cols [#{Defaults[:cols]}]: ", Integer)   {|q| q.default = Defaults[:cols]  }
-			@mines = cli.ask("Number of mines [#{Defaults[:mines]}]: ", Integer) {|q| q.default = Defaults[:mines] }
+		def prompt_for_value(key)
+			question = "Number of #{key} [#{Defaults[key]}]: "
+			cli.ask(question, Integer) {|q| q.default = Defaults[key] }
 		end
 	end
 end

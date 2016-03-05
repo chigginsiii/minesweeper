@@ -17,7 +17,18 @@ to start:
 bin/minesweeper
 ```
 
-Minesweeper will begin by asking for number of rows, columns, and mines.
+### Options:
+
+```
+Options:
+  -r, --rows=<i>       Number of rows (default: 12)
+  -c, --cols=<i>       Number of columns (default: 10)
+  -m, --mines=<i>      Number of mines (default: 20)
+  -i, --interactive    Set up games/board interactively
+  -h, --help           Show this message
+ ```
+
+### Interactive setup:
 
 ```
 1. rows

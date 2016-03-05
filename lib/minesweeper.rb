@@ -1,5 +1,6 @@
 require 'forwardable'
-require 'paint'
+require 'trollop'
+require 'highline'
 
 require 'minesweeper/errors'
 require 'minesweeper/entity/point_entity'
@@ -9,6 +10,7 @@ require 'minesweeper/entity/board_entity'
 require 'minesweeper/entity/cell_entity'
 require 'minesweeper/game'
 require 'minesweeper/render'
+require 'minesweeper/cli'
 
 module Minesweeper
 
