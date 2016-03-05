@@ -11,3 +11,7 @@ group :development do
   gem 'rspec', '~> 3.4.0'
   gem 'guard-rspec', '~> 4.6.4'
 end
+
+group :test do
+  gem 'simplecov'
+end

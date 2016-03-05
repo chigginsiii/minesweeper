@@ -22,3 +22,6 @@
 
 # ignore spec timing output
 spec/examples.txt
+
+# ignore simplecov
+coverage
