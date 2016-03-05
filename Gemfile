@@ -2,8 +2,8 @@ ruby '2.1.2'
 
 source 'https://rubygems.org'
 
+gem 'progress_bar'
 gem 'highline'
-gem 'paint'
 gem 'dispel'
 
 group :development do

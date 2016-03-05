@@ -1,28 +1,31 @@
 module Benchsweeper
 	class Board
+		attr_reader :game
+
 		def initialize(game)
 			@game = game
 			setup
 		end
 
-		def setup
-			@board = []
-			@game.flat_board.split("\n").each_with_index do |row, row_i|
-				board_row = []
-				row.split('').each_with_index do |val, col_i|
-					board_row << Cell.new(val, row_i, col_i)
-				end
-				@board << row
-			end
+		def board
+			@board ||= []
 		end
 
 		def all_cells
-			@board.flatten
+			board.flatten
+		end
+
+		def hidden_cells
+			all_cells.select {|c| c.hidden? }
+		end
+
+		def revealed_cells
+			all_cells.select {|c| c.revealed? }
 		end
 
 		def get_cell(row, col)
 			return unless valid_row_col row, col
-			@board[row - 1][col - 1]
+			board[row - 1][col - 1]
 		end
 
 		def adjacent_cells(cell)
@@ -39,8 +42,22 @@ module Benchsweeper
 
 		private
 
-		def valid_row_col(r,c)
-			row > 0 && row <= @board.length && col > 0 && col <= @board[0].length
+		def setup
+			game.flat_board.split("\n").each_with_index do |row, row_i|
+				board_row = []
+				# unicode splits are hard.
+				row
+					.split('')
+					.reject {|char| char =~ /[[:space:]]/ }
+					.each_with_index do |val, col_i|
+						board_row << Cell.new(val, row_i, col_i)
+					end
+				board << board_row
+			end
+		end
+
+		def valid_row_col(row, col)
+			row > 0 && row <= board.length && col > 0 && col <= board[0].length
 		end
 	end
 end

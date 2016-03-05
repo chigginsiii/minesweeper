@@ -47,10 +47,6 @@ module Minesweeper
 
 		private
 
-		#
-		# XXX: these could be moved into CellRenderer, same for Hidden/Array
-		#
-
 		def render_cell(cell)
 			cell.point == game.position ? "[#{cell_status}]" : " #{cell_status} "
 		end

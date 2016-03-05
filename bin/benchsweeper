@@ -3,8 +3,9 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'minesweeper'
 require 'benchsweeper'
+require 'progress_bar'
 
-NumGames = 50
+NumGames = 100
 
 NumRows = 10
 NumCols = 10
@@ -13,7 +14,7 @@ NumMines = 10
 num_wins = 0
 times    = []
 
-# timer here...
+bar = ProgressBar.new(NumGames)
 
 (1..NumGames).each do |i|
 	game = Minesweeper.new_game(rows: NumRows, cols: NumCols, mines: NumMines)
@@ -21,20 +22,55 @@ times    = []
 
 	t0 = Time.now
 	until game.complete?
-		[
-			:fill_in_blocks,
-			:fill_in_flag_blocks,
-			:pick_random_adjacent,
-			:pick_random
-		].each do |technique|
-		  num_changed = solver.send technique
-			next if num_changed > 0
-			break if solver.complete?
-		end
+		next if solver.must_be_mines
+		break if game.complete?
+
+		next if solver.must_not_be_mines
+		break if game.complete?
+
+		next if solver.pick_random_adjacent
+		break if game.complete?
+
+		next if solver.pick_random
+		break if game.complete?
 	end
 
 	# record result/timing, next game
-	num_wins += 1 if game.won?
-	times.push (Time.now - t0)
+	times.push [(Time.now - t0), game.status.result]
+  num_wins += 1 if game.won?
+
+
+	bar.increment!
+
+	# would be cool to partition the times on won/lost, then get min/max/avg.
+
+	# DEBUG: wanna see the boards?
+	#
+	#	puts "\n#{game.flat_board}"
+	#	puts "#{game.status}"
+	# puts "#{num_wins}/#{i} in #{times.last}"
+	#	puts
 end
+
+
+#
+# this part's absurd. needs a stats-view class :)
+#
+
+win_times, lose_times = times.partition {|t| t[1] == :won}
+times = times.map {|t| t[0]}
+win_times = win_times.map {|t| t[0] }
+lose_times = lose_times.map {|t| t[0] }
+
+total_time = times.reduce(0){|sum,t| sum + t }
+total_win_time = win_times.reduce(0){|sum,t| sum + t }
+total_lose_time = lose_times.reduce(0){|sum,t| sum + t }
+
+avg_time   = total_time / times.count
+avg_win_time = total_win_time / win_times.count
+avg_lose_time = total_lose_time / lose_times.count
+
+puts sprintf("%i/%i in %.2f seconds (min/max/avg: %.4f / %.4f / %.4f)", num_wins, NumGames, total_time, times.max, times.min, avg_time)
+puts sprintf("wins min/max/avg: %.4f / %.4f / %.4f)", win_times.min, win_times.max, avg_win_time)
+puts sprintf("lose min/max/avg: %.4f / %.4f / %.4f)", lose_times.min, lose_times.max, avg_lose_time)
 

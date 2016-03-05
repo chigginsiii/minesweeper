@@ -1,45 +1,108 @@
-	module Benchsweeper
-		class Solver
-		attr_reader
+module Benchsweeper
+	class Solver
+		extend Forwardable
+		attr_reader :game, :board
 
 		def initialize(game)
 			@game = game
-			@board = Board.new game
+			update_board
 		end
 
 		def complete?
-			@game.complete?
+			game.complete?
 		end
 
-		# find cells where hidden adjacent == num adjacent
-		# test whole board, restart the loop if it succeeds (100%)
-		def fill_in_blocks
-			puts 'fill in blocks'
-			num_changed = 0
+		# guarantees a new board each 
+		def update_board
+			@board = Board.new game
 		end
 
-		# find cells where num adjacent == hidden + flagged
-		# test first avail, stop as soon as one succeeds
-		def fill_in_flag_blocks
-			puts 'fill in flag blocks'
-			num_changed = 0
+		#
+		# each of these solver methods returns true if cells
+		# have been changed, false if they have not.
+		#
+
+		#
+		# these are all ripe for refactoring now. the duplication is pretty evident,
+		# the pattern's emerged, and the abstraction is understood.
+		#
+
+		#   where: num_touching equals number of hidden + flagged adjacent squares
+		#       -> flag those hidden squares
+		def must_be_mines
+			cells_to_flag = {}
+			board.revealed_cells.each do |cell|
+				hidden_or_flagged_adjacents = board.adjacent_cells(cell).select {|ac| ac.hidden? || ac.flagged?}
+				if cell.value.to_i == hidden_or_flagged_adjacents.count
+					hidden_or_flagged_adjacents.each { |ac| cells_to_flag[ac.coords] = ac unless ac.flagged?}
+				end
+			end
+			return false if cells_to_flag.empty?
+
+			cells_to_flag.each_value do |c|
+			  game.flag_cell(row: c.row, col: c.col)
+			end
+			update_board
+			true
 		end
 
-		# find a cell with the lowest num adjacents and most hidden/flagged,
-		# pick an adjacent hidden at random
-		# test best criteria, return as soon as one's been done
+		#   where: num_touching equals number of flagged squares
+		#       -> reveal those hidden sqares
+		def must_not_be_mines
+			cells_to_reveal = {}
+			board.revealed_cells.each do |cell|
+				flagged_adjacents = []
+				hidden_adjacents = []
+				board.adjacent_cells(cell).each do |ac| 
+					flagged_adjacents << ac if ac.flagged?
+					hidden_adjacents << ac if ac.hidden?
+				end
+				next if flagged_adjacents.empty? || hidden_adjacents.empty?
+
+				if cell.value.to_i == flagged_adjacents.count
+					hidden_adjacents.each { |ac| cells_to_reveal[ac.coords] = ac }
+				end
+			end
+			return false if cells_to_reveal.empty?
+
+			cells_to_reveal.each_value do |c|
+			  game.select_cell(row: c.row, col: c.col)
+			end
+			update_board
+			true
+		end
+
+
 		def pick_random_adjacent
-			puts 'select random adjacent'
-			num_changed = 0
+			# get a cell with a low adjacent-mines value
+			ordered_revealed_cells = board
+				.revealed_cells
+				.select {|c| c.value =~ /^[1-8]$/ }
+				.sort_by {|c| c.value }
+			return false if ordered_revealed_cells.empty?
+
+			# find the first hidden adjacent cell that comes our way...
+			adjacent_hidden_cell = nil
+			ordered_revealed_cells.each do |c|
+			  adjacent_hidden_cell = board.adjacent_cells(c).find {|ac| ac.hidden? }
+			  break unless adjacent_hidden_cell.nil?
+			end
+			return false if adjacent_hidden_cell.nil?
+
+			game.select_cell(
+				row: adjacent_hidden_cell.row,
+				col: adjacent_hidden_cell.col
+			)
+			update_board
+			true
 		end
 
 		# and here we are. find a hidden cell and pick it. heh.
-		# return immediately
 		def pick_random
-			puts 'select random'
-			puts @game.flat_board
-			@game.complete(:won)
-			num_changed = 0
+			random = board.hidden_cells.sample
+			game.select_cell( row: random.row, col: random.col)
+			update_board
+			true
 		end
 
 		private

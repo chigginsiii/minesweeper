@@ -22,7 +22,7 @@ module Minesweeper
 		end
 
 		#
-		# state queries
+		# query
 		#
 
 		def mine?
@@ -30,17 +30,8 @@ module Minesweeper
 			@mine == true
 		end
 
-		def reveal!
-			@flagged = false
-			@revealed = true
-		end
-
 		def revealed?
 			@revealed == true
-		end
-
-		def hidden?
-			!revealed?
 		end
 
 		def flagged?
@@ -51,18 +42,35 @@ module Minesweeper
 			!flagged?
 		end
 
+		def hidden?
+			unflagged? && !revealed?
+		end
+
 		#
-		# state commands
+		# command
 		#
+
+		def reveal!
+			@flagged = false
+			@revealed = true
+		end
 
 		def reveal
 			raise Minesweeper::SelectError, 'cannot reveal flagged cell' if flagged?
 			reveal!
 		end
 
-		def toggle_flag
+		def flag
 			raise Minesweeper::SelectError, 'revealed cell cannot be flagged' if revealed?
-			@flagged = !@flagged
+			@flagged = true
+		end
+
+		def unflag
+			@flagged = false
+		end
+
+		def toggle_flag
+			flagged? ? flag : unflag
 		end
 
 		# debug
