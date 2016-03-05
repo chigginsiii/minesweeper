@@ -67,8 +67,7 @@ end
 
 def view
 	lines = [*(@game.draw), "#{@game.stats}"]
-	flash = @game.read_flash_msg
-	lines << flash ? flash : ''
+	lines << @game.read_flash_msg
 	lines << "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit."
   lines.join("\n")
 end

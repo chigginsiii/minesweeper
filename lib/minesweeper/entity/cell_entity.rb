@@ -70,7 +70,7 @@ module Minesweeper
 		end
 
 		def toggle_flag
-			flagged? ? flag : unflag
+			flagged? ? unflag : flag
 		end
 
 		# debug
