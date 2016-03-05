@@ -74,3 +74,5 @@ Options:
   -i, --interactive    Set up games/board interactively
   -h, --help           Show this message
 ```
+
+Running `benchsweeper` with the `--boards` option will show the result of each game, the running total of wins/games-played, and that game's time. Otherwise you get a progress bar and stats at the end.

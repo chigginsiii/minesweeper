@@ -8,13 +8,13 @@ x trollop/highline cli module for minesweeper
   - CellEntity: tests need to cover each method, but they're simple.
 	- BoardEntity: need to cover each public method, also simple
 
-
-
-
-
 - TESTS: Minesweeper went through significant updates/additions and needs tests everywhere
 
 - Minesweeper Refactor: 
+
+	- CLI: both use an almost identical CLI, figure out way to feed them the options
+
+DONE:
 	
 	- Render classes:
 	  - are prepared for abstraction/refactor
@@ -23,11 +23,6 @@ x trollop/highline cli module for minesweeper
 	- Game:
 	  - extract terminal UI concerns
 	  - update bin/minesweeper to use UI API
-	
-	- CLI: both use an almost identical CLI, figure out way to feed them the options
-
-	DONE:
-
 	- CellEntiity: looking pretty tight
 	- BoardEntity: small refactors but otherwise tight
 	- PointEntity/PositionEntity: lookin' good
