@@ -106,6 +106,8 @@ module Minesweeper
 			@position = position
 		end
 
+		private
+
 		def draw_cell(cell)
 			basic_cell = super
 			cell.point == position ? "[#{basic_cell}]" : " #{basic_cell} "
@@ -117,6 +119,8 @@ module Minesweeper
 			super
 			@cell_renderer = HiddenCellRenderer
 		end
+
+		private
 
 		def draw_cell(cell)
 			super.gsub(/[\[\]]/, ' ')
