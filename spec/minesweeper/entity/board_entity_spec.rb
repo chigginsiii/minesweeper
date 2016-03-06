@@ -93,12 +93,12 @@ RSpec.describe Minesweeper::BoardEntity do
 	describe '#adjacent_mines' do
 		let(:cell_array) do
 		  (1..5).map do |col|
-		  	point = Minesweeper::PointEntity.new row: 1, col: col
-		  	if col < 3
-			  	Minesweeper::CellEntity.mine point: point
-			  else
-			  	Minesweeper::CellEntity.safe point: point
-			  end
+				point = Minesweeper::PointEntity.new row: 1, col: col
+				if col < 3
+					Minesweeper::CellEntity.mine point: point
+				else
+					Minesweeper::CellEntity.safe point: point
+				end
 			end
 		end	
 		before { allow(board).to receive(:adjacent_cells).and_return(cell_array)}

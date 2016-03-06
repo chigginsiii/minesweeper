@@ -18,14 +18,6 @@ module Minesweeper
 			point.get_cell board
 		end
 
-		def put_cell(cell)
-			cell.point.put_cell board, cell
-		end
-
-		def empty_cell?(point)
-			get_cell(point).nil?
-		end
-
 		#
 		# scopes/queries
 		#
@@ -87,6 +79,14 @@ module Minesweeper
 
 		def board
 			@board ||= Array.new(num_rows) { Array.new(num_cols) }
+		end
+
+		def put_cell(cell)
+			cell.point.put_cell board, cell
+		end
+
+		def empty_cell?(point)
+			get_cell(point).nil?
 		end
 
 		#

@@ -1,30 +1,32 @@
 module Minesweeper
 	class StatsEntity
-		attr_reader :game
+		attr_reader :game, :board, :status
 		def initialize(game)
 			@game = game
+			@board = game.board
+			@status = game.status
 		end
 
 		def cells_total
-			game.board.all_cells.count
+			board.all_cells.count
 		end
 
 		def cells_revealed
-			game.board.revealed_cells.count
+			board.revealed_cells.count
 		end
 
 		def cells_flagged
-			game.board.flagged_cells.count
+			board.flagged_cells.count
 		end
 
 		def mines
-			game.board.num_mines.to_i
+			board.num_mines.to_i
 		end
 
 		def to_s
-			if game.status.in_progress?
+			if status.in_progress?
 				"revealed/mines/total: #{cells_revealed}/#{mines}/#{cells_total}"
-			elsif game.status.won?
+			elsif status.won?
 				"WINNER!"
 			else
 				"GAME OVER!"
