@@ -11,14 +11,19 @@ module Benchsweeper
 		def complete?
 			game.complete?
 		end
-		#
-		# each of these solver methods returns true if cells
-		# have been changed, false if they have not.
-		#
-
+		
 		#
 		# these are all ripe for refactoring now. the duplication is pretty evident,
 		# the pattern's emerged, and the abstraction is understood.
+		#
+		# UPDATE: basic specs in place, refactor away!
+		#
+
+		#
+		# solver methods returns true if cells have been changed,
+		# false if they have not, allowing the solving loop to break
+		# and start from the top if the more accurate techniques
+		# succeed and change the board
 		#
 
 		#   where: num_touching equals number of hidden + flagged adjacent squares

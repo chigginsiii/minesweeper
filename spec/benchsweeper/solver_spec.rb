@@ -1,8 +1,4 @@
 RSpec.describe Benchsweeper::Solver do
-	# double 'game' board_flat => rendered_board
-	#         - expect flag_cell
-	#         - expect select_cell
-	let(:board) { 'X 1 . . . X 2 X'}
 	let(:game) { double :flat_board => board }
 	let(:solver) { described_class.new game }
 	before do
@@ -16,6 +12,7 @@ RSpec.describe Benchsweeper::Solver do
 		# - use 'game' double to verify :flag_cell is called twice with row/col
 		# - verify if returns true
 		context 'when cell meets criteria' do
+			let(:board) { 'X 1 . . . X 2 X'}
 			it 'flags cell' do
 				expect(game).to receive(:flag_cell).exactly(3).times
 				solver.must_be_mines
