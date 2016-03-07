@@ -1,60 +1,96 @@
 require 'spec_helper'
 
 RSpec.describe Minesweeper::Game do
-	let(:rows) { 7 }
-	let(:cols) { 5 }
-	let(:mines) { 10 }
-	let(:game) { described_class.new(rows: rows, cols: cols, mines: mines) }
 
-	describe '#new' do		
-		context 'with valid params' do
-			it 'sets up rows' do
-				expect(game.num_rows).to eq rows
-			end
+	# delegates not tested here include:
+	# game.status -> #complete? #in_progress? #won? #lost?
+	# game.board  -> #num_rows, #num_cols, #num_mines, 
 
-			it 'sets up columns' do
-				expect(game.num_cols).to eq cols
-			end
+	include_context 'game setup'
+	# includes 'game', which is loaded with a custom board
+	# 
+	#   M  2  1          F  ◼  ◼
+	#   1  3  M    =>    ◼  3  ◼
+	#   .  2  M          .  2  ◼
 
-			it 'sets up mines' do
-				expect(game.num_mines).to eq mines
-			end
 
-			it 'loads the game' do
-			end
-		end
-
-		context 'with invalid rows param' do
-			let(:rows) { Minesweeper::BoardEntity::MaxRows + 1}
-			it 'raises an exception' do
-				expect { game }.to raise_exception Minesweeper::BoardError
-			end
-		end
-
-		context 'with invalid cols param' do
-			let(:cols) { Minesweeper::BoardEntity::MaxCols + 1}
-			it 'raises an exception' do
-				expect { game }.to raise_exception Minesweeper::BoardError
-			end
+	describe '#flat_board' do
+		let(:hidden_board) { " F  ◼  ◼ \n ◼  3  ◼ \n .  2  ◼ " }
+		it 'renders board' do
+			expect(game.flat_board).to eq hidden_board
 		end
 	end
 
-	describe '#reveal_cell' do
-		context 'when cell is not a mine' do
+	describe '#flat_board' do
+		let(:revealed_board) { " M  2  1 \n 1  3  M \n .  2  M " }
+		it 'renders board revealed' do
+  		expect(game.flat_board_revealed).to eq revealed_board
 		end
-		context 'when cell is a mine' do
+	end
+
+	describe '#select_cell' do
+		let(:board_cell) do
+			point = build :point, row: row, col: col
+		  game.board.get_cell(point)
+		end
+
+		context 'when cell is hidden' do
+			let(:row) { 1 }
+			let(:col) { 3 }
+			before { game.select_cell(row: row, col: col) }
+
+			it 'selects cell' do
+				expect(board_cell.coords).to eq '1:3'
+			end
+		end
+
+		context 'when cell is revealed' do
+			let(:row) { 2 }
+			let(:col) { 1 }
+			before { game.select_cell(row: row, col: col) }
+
+			it 'does nothing' do
+				expect(board_cell.revealed?).to eq true
+			end
+		end
+
+		context 'when cell is flagged' do
+			let(:row) { 1 }
+			let(:col) { 1 }
+
+			it 'complains' do
+				expect { game.select_cell(row: row, col: col) }.to raise_error Minesweeper::SelectError
+			end
 		end
 	end
 
 	describe '#flag_cell' do
-		context 'when cell is not revealed' do
-			context 'when cell is not flagged' do
-			end
-			context 'when cell is flagged' do
-			end
+		context 'when cell is hidden' do
 		end
-		context 'when cell has already been revealed' do
+		context 'when cell is revealed' do
 		end
 	end
 
+	describe '#unflag_cell' do
+		context 'when cell is hidden' do
+		end
+		context 'when cell is revealed' do
+		end
+	end
+
+	describe '#toggle_flag' do
+		context 'when cell is flagged' do
+		end
+		context 'when cell is unflagged' do
+		end
+	end
+
+	describe '#flat_board' do
+		let(:flat) do
+			[' F  ◼  ◼ ',' ◼  3  ◼ ',' .  2  ◼ '].join("\n")
+		end
+		it 'renders board' do
+			expect(game.flat_board).to eq flat
+		end
+	end
 end

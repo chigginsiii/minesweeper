@@ -97,6 +97,13 @@ module Minesweeper
 		end
 	end
 
+	class RenderHidden < Render
+		def initialize(game)
+			super
+			@cell_renderer = HiddenCellRenderer
+		end
+	end
+
 	class RenderTerminal < Render
 		attr_reader :position
 		ColSeparator = ' '

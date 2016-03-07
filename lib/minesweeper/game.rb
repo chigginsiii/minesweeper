@@ -3,13 +3,12 @@ module Minesweeper
 		extend Forwardable
 
 		#
-		# XXX: concepts list 'position' and 'move' are cursor concepts,
-		# they belong in a UI class to wire the game's API to a terminal client.
+		# these should perhaps be protected or private...
+		# but it's sure handy for testing heh.
 		#
-
 		attr_reader :board, :status, :position, :stats
 
-		def_delegators :@board, :num_rows, :num_cols, :num_mines, :flagged_cells  
+		def_delegators :@board, :num_rows, :num_cols, :num_mines  
 		def_delegators :@status, :complete?, :in_progress?, :won?, :lost?, :complete
 
 		def initialize (rows:, cols:, mines:)
@@ -17,12 +16,6 @@ module Minesweeper
 			@status 	= StatusEntity.new
 			@stats    = StatsEntity.new(self)
 		end
-
-		#
-		# api: generalize actions here, and
-		#      then refactor UI-coupled methods
-		#      to use them.
-		#
 
 		def select_cell(row:, col:)
 			point = PointEntity.new(row: row, col: col)
@@ -49,7 +42,11 @@ module Minesweeper
 		end
 
 		def flat_board
-			Minesweeper::Render.new(self).draw
+			Render.new(self).draw
+		end
+
+		def flat_board_revealed
+			RenderHidden.new(self).draw
 		end
 
 		private
@@ -73,7 +70,5 @@ module Minesweeper
 		def revealed_mine?
 			board.revealed_cells.find {|c| c.mine? }.nil? ? false : true
 		end
-
-		# ditto.
 	end
 end

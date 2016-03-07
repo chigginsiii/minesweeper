@@ -2,7 +2,7 @@ module Minesweeper
 	class CellEntity
 		extend Forwardable
 		attr_accessor :point
-		def_delegators :@point, :row, :col
+		def_delegators :@point, :row, :col, :coords
 
 		class << self
 			def mine(point:)

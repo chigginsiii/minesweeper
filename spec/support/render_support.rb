@@ -30,50 +30,17 @@ RSpec.shared_context 'cell_renderer setup' do
 	let(:cell_renderer) { described_class.new cell, board }
 end
 
-#
-# this is all for setting up a custom board, I expect it'll
-# become useful for something besides render soon and it'll
-# get extracted.
-#
-
 RSpec.shared_context 'renderer setup' do
-
-	# hidden-cell, revealed-cell, 
-	def hc(row,col)
-		build :cell, row: row, col: col
-	end
-
-	def rc(row,col)
-		build :cell, :revealed, row: row, col: col
-	end
-
-	# hidden-mine, revealed-mine,
-	def hm(row,col)
-		build :cell, :mine, row: row, col: col
-	end
-
-	def rm(row,col)
-		build :cell, :mine, :revealed, row: row, col: col
-	end
-
-	# flagged-cell, flagged-mine
-	def fc(row,col)
-		build :cell, :flagged, row: row, col: col
-	end
-
-	def fm(row,col)
-		build :cell, :flagged, :mine, row: row, col: col
-	end
-
 	let(:rendered_three_by_hidden) do
 		[' ◼  1  . ', ' ◼  2  ◼ ', ' F  ◼  F '].join"\n"
 	end
 
 	let(:three_by) do
+		cm = CellMaker.new
 		[
-			[ hc(1,1), rc(1,2), rc(1,3) ],
-			[ hm(2,1), rc(2,2), hc(2,3) ],
-			[ fm(3,1), hc(3,2), fc(3,3) ],
+			[ cm.hc(1,1), cm.rc(1,2), cm.rc(1,3) ],
+			[ cm.hm(2,1), cm.rc(2,2), cm.hc(2,3) ],
+			[ cm.fm(3,1), cm.hc(3,2), cm.fc(3,3) ],
 		]
 	end
 	let(:board)    { build :board, load_board: three_by }
