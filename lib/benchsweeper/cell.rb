@@ -1,5 +1,10 @@
 module Benchsweeper
 	class Cell
+
+		# XXX: 
+		# currently uses array indices to initialize, should
+		# have it do row/col and then provide a from_indices method
+
 		attr_reader :value, :row, :col
 		def initialize(val, row_i, col_i)
 			@value = val
@@ -10,7 +15,7 @@ module Benchsweeper
 		def status
 			@status ||= case value
 			when 'F'
-				:flag
+				:flagged
 			when 'M'
 				:mine
 			when /^(\d|\.)$/
@@ -24,20 +29,16 @@ module Benchsweeper
 			value == '.' ? 0 : cell.to_i
 		end
 
-		def hidden?
-			status == :hidden
-		end
+		# query methods, eg:
+		#
+		# def hidden?
+		# 	status == :hidden
+		# end
 
-		def flagged?
-			status == :flag
-		end
-
-		def mine?
-			status == :mine
-		end
-
-		def revealed?
-			status == :revealed
+		[ :hidden, :flagged, :mine, :revealed ].each do |key|
+			define_method "#{key}?".to_sym do
+				status == key
+			end
 		end
 
 		def coords

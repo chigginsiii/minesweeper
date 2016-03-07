@@ -13,21 +13,9 @@ module Minesweeper
 			validate_params
 			setup
 		end
-
-		def board
-			@board ||= Array.new(num_rows) { Array.new(num_cols) }
-		end
-
+		
 		def get_cell(point)
 			point.get_cell board
-		end
-
-		def put_cell(cell)
-			cell.point.put_cell board, cell
-		end
-
-		def empty_cell?(point)
-			get_cell(point).nil?
 		end
 
 		#
@@ -88,6 +76,18 @@ module Minesweeper
 		end
 
 		private
+
+		def board
+			@board ||= Array.new(num_rows) { Array.new(num_cols) }
+		end
+
+		def put_cell(cell)
+			cell.point.put_cell board, cell
+		end
+
+		def empty_cell?(point)
+			get_cell(point).nil?
+		end
 
 		#
 		# adjacent_cells helpers

@@ -97,6 +97,13 @@ module Minesweeper
 		end
 	end
 
+	class RenderHidden < Render
+		def initialize(game)
+			super
+			@cell_renderer = HiddenCellRenderer
+		end
+	end
+
 	class RenderTerminal < Render
 		attr_reader :position
 		ColSeparator = ' '
@@ -105,6 +112,8 @@ module Minesweeper
 			super(game)
 			@position = position
 		end
+
+		private
 
 		def draw_cell(cell)
 			basic_cell = super
@@ -117,6 +126,8 @@ module Minesweeper
 			super
 			@cell_renderer = HiddenCellRenderer
 		end
+
+		private
 
 		def draw_cell(cell)
 			super.gsub(/[\[\]]/, ' ')

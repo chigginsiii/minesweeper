@@ -30,7 +30,67 @@ RSpec.describe Minesweeper::StatusEntity do
 		end
 		context 'when unknown' do
 			it 'complains' do
-				expect { status.complete :foo }.to raise_error
+				expect { status.complete :foo }.to raise_error Minesweeper::StatusError
+			end
+		end
+	end
+
+	describe '#complete?' do
+		subject { status.complete? }
+		context 'when in progress' do
+			it { is_expected.to eq false }
+		end
+		context 'when complete' do
+			before { status.complete :won }
+			it { is_expected.to eq true }
+		end
+	end
+
+	describe '#in_progress?' do
+		subject { status.in_progress? }
+		context 'when in progress' do
+			it { is_expected.to eq true }
+		end
+		context 'when complete' do
+			before { status.complete :won }
+			it { is_expected.to eq false }
+		end
+	end
+
+	describe '#won?' do
+		subject { status.won? }
+		context 'when result is win' do
+			before { status.complete :won }
+			it { is_expected.to eq true }
+		end
+		context 'when result is not win' do
+			before { status.complete :lost }
+			it { is_expected.to eq false }
+		end
+	end
+
+	describe '#lost?' do
+		subject { status.lost? }
+		context 'when result is loss' do
+			before { status.complete :lost }
+			it { is_expected.to eq true }
+		end
+		context 'when result is not loss' do
+			before { status.complete :won }
+			it { is_expected.to eq false }
+		end
+	end
+
+	describe '#to_s' do
+		context 'when in_progress' do
+			it 'renders the state' do
+				expect("#{status}").to eq status.state.to_s
+			end
+		end
+		context 'when complete' do
+			it 'renders the state and result' do
+				status.complete :won
+				expect("#{status}").to eq "#{status.state}:#{status.result}"
 			end
 		end
 	end

@@ -1,30 +1,11 @@
-
-- go through all of it, and make a new TODO list.
-
-
-x trollop/highline cli module for minesweeper
-
-- TESTS: Benchsweeper must have some coverage around at least public methods to prepare for refactoring
-  - CellEntity: tests need to cover each method, but they're simple.
-	- BoardEntity: need to cover each public method, also simple
-
-- TESTS: Minesweeper went through significant updates/additions and needs tests everywhere
+- refactor solver into separate modules
+- extract benchsweeper::play from script
 
 - Minesweeper Refactor: 
-
 	- CLI: both use an almost identical CLI, figure out way to feed them the options
+
+
+
 
 DONE:
 	
-	- Render classes:
-	  - are prepared for abstraction/refactor
-		- make cell renderer more encapsulated
-	
-	- Game:
-	  - extract terminal UI concerns
-	  - update bin/minesweeper to use UI API
-	- CellEntiity: looking pretty tight
-	- BoardEntity: small refactors but otherwise tight
-	- PointEntity/PositionEntity: lookin' good
-	- Stats/Status: both lookin' good.
-

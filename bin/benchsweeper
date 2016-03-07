@@ -25,16 +25,24 @@ puts "#{config}\n"
 
 bar = ProgressBar.new(NumGames)
 
+#
+# this could be made multi-threaded, wonder what diff will be on mac?
+#
+
 (1..NumGames).each do |i|
 	game = Minesweeper.new_game(rows: NumRows, cols: NumCols, mines: NumMines)
 	solver = Benchsweeper.solver(game)
 
+	#
+	# this block is ready to be moved into its own module
+	# where it can keep track of it timing/wins/etc
+	#
+
 	t0 = Time.now
 	until game.complete?
-		next if solver.must_be_mines
-		break if game.complete?
-
-		next if solver.must_not_be_mines
+		# these are both 100% certain
+		must_be_mines_result = solver.must_be_mines
+		next if solver.must_not_be_mines || must_be_mines_result
 		break if game.complete?
 
 		next if solver.pick_random_adjacent

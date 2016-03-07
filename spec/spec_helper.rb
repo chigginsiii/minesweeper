@@ -1,8 +1,23 @@
+require 'simplecov'
+SimpleCov.start
+
+require 'factory_girl'
 require 'rspec'
 require 'pp'
 require 'minesweeper'
+require 'benchsweeper'
+
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f }
 
 RSpec.configure do |config|
+
+  # factory girl configs
+  config.include FactoryGirl::Syntax::Methods
+  config.before(:suite) do
+    FactoryGirl.lint
+  end
+  Dir[File.dirname(__FILE__) + "/factories/**/*.rb"].each {|f| require f }
+
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

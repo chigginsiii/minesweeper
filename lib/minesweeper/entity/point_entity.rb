@@ -13,6 +13,7 @@ module Minesweeper
 		def to_s
 			"#{@row}:#{col}"
 		end
+		alias_method :coords, :to_s
 
 		def get_cell(board)
 			board[row - 1][col - 1]
