@@ -1,5 +1,3 @@
-require 'spec_helper'
-
 RSpec.describe Minesweeper::Game do
 
 	# delegates not tested here include:

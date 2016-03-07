@@ -30,11 +30,7 @@ RSpec.shared_context 'cell_renderer setup' do
 	let(:cell_renderer) { described_class.new cell, board }
 end
 
-RSpec.shared_context 'renderer setup' do
-	let(:rendered_three_by_hidden) do
-		[' ◼  1  . ', ' ◼  2  ◼ ', ' F  ◼  F '].join"\n"
-	end
-
+RSpec.shared_context 'three_by_three_game' do
 	let(:three_by) do
 		cm = CellMaker.new
 		[
@@ -45,24 +41,33 @@ RSpec.shared_context 'renderer setup' do
 	end
 	let(:board)    { build :board, load_board: three_by }
 	let(:game)     { double('game', board: board, num_rows: 3, num_cols: 3, num_mines: 3) }
+end
+
+RSpec.shared_context 'renderer setup' do
+	include_context 'three_by_three_game'
+
+	let(:rendered_three_by_hidden) do
+		[' ◼  1  . ', ' ◼  2  ◼ ', ' F  ◼  F '].join"\n"
+	end
+
 	let(:renderer) { described_class.new game }
 end
 
 RSpec.shared_context 'terminal renderer setup' do
-	include_context 'renderer setup' do
-		let(:rendered_three_by_hidden) do
-			[	'[ ◼ ]  1    .  ' ,
-        '  ◼    2    ◼  ' ,
-        '  F    ◼    F  ' ].join("\n")
-    end
+	include_context 'three_by_three_game'
 
-    let(:rendered_three_by_revealed) do
-    	['  1    1    .  ',
-       '  M    2    .  ',
-       '  M    2    .  '].join("\n")
-		end
+	let(:rendered_three_by_hidden) do
+		[	'[ ◼ ]  1    .  ' ,
+      '  ◼    2    ◼  ' ,
+      '  F    ◼    F  ' ].join("\n")
+  end
 
-		let(:position) { build :point }
-		let(:renderer) { described_class.new game, position }
+  let(:rendered_three_by_revealed) do
+  	['  1    1    .  ',
+     '  M    2    .  ',
+     '  M    2    .  '].join("\n")
 	end
+
+	let(:position) { build :point }
+	let(:renderer) { described_class.new game, position }
 end
