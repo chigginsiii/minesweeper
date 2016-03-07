@@ -37,7 +37,7 @@ module Minesweeper
 		end
 
 		def unflag_cell(row:, col:)
-			cell = board.get_cell point PointEntity.new(row: row, col: col)
+			cell = board.get_cell PointEntity.new(row: row, col: col)
 			cell.unflag
 		end
 

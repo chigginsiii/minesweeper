@@ -28,11 +28,17 @@ RSpec.describe Minesweeper::Game do
 		end
 	end
 
+	#
+	# use the row/col from the above boards
+	# :board_cell is the CellEntity from the board itself
+	#
+
+	let(:board_cell) do
+		point = build :point, row: row, col: col
+	  game.board.get_cell(point)
+	end
+
 	describe '#select_cell' do
-		let(:board_cell) do
-			point = build :point, row: row, col: col
-		  game.board.get_cell(point)
-		end
 
 		context 'when cell is hidden' do
 			let(:row) { 1 }
@@ -65,23 +71,67 @@ RSpec.describe Minesweeper::Game do
 	end
 
 	describe '#flag_cell' do
+		before { game.flag_cell row: row, col: col }
+
 		context 'when cell is hidden' do
+			let(:row) { 2 }
+			let(:col) { 1 }
+
+			it 'flags cell' do
+				expect(board_cell.flagged?).to eq true				
+			end
 		end
+	
 		context 'when cell is revealed' do
+			let(:row) { 3 }
+			let(:col) { 2 }
+	
+			it 'does nothing' do
+				expect(board_cell.flagged?).to eq false
+			end
 		end
 	end
 
 	describe '#unflag_cell' do
-		context 'when cell is hidden' do
+		before { game.unflag_cell row: row, col: col }
+
+		context 'when cell is flagged' do
+			let(:row) { 1 }
+			let(:col) { 1 }
+
+			it 'unflags cell' do
+				expect(board_cell.flagged?).to eq false
+			end
 		end
-		context 'when cell is revealed' do
+
+		context 'when cell is unflagged' do
+			let(:row) { 3 }
+			let(:col) { 2 }
+
+			it 'does nothing' do
+				expect(board_cell.flagged?).to eq false
+			end
 		end
 	end
 
 	describe '#toggle_flag' do
+		before { game.toggle_flag row: row, col: col }
 		context 'when cell is flagged' do
+			let(:row) { 1 }
+			let(:col) { 1 }
+
+			it 'unflags the cell' do
+				expect(board_cell.flagged?).to eq false
+			end
 		end
+
 		context 'when cell is unflagged' do
+			let(:row) { 2 }
+			let(:col) { 1 }
+
+			it 'flags the cell' do
+				expect(board_cell.flagged?).to eq true
+			end
 		end
 	end
 
