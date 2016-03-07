@@ -29,6 +29,35 @@ RSpec.describe Minesweeper::Terminal do
 				end
 				terminal.dispatch_action :reveal
 			end			
+
+			context 'when game is won' do
+				before do
+					allow(terminal).to receive(:reveal_cell) do |args|
+						game.status.complete :won
+					end
+				end
+				it 'notifies flash' do
+					terminal.dispatch_action :reveal
+					expect(terminal.flash).to include 'YOU WON'
+				end
+			end
+
+			context 'when game is lost' do
+				before do
+					allow(terminal).to receive(:reveal_cell) do |args|
+						game.status.complete :lost
+					end
+				end
+				it 'notifies flash' do
+					terminal.dispatch_action :reveal
+					expect(terminal.flash).to include 'YOU LOSE'
+				end
+
+				it 'renders all hidden cells' do
+					expect(Minesweeper::RenderTerminalHidden).to receive(:new)
+					terminal.dispatch_action :reveal
+				end
+			end
 		end
 	end
 
@@ -43,6 +72,4 @@ RSpec.describe Minesweeper::Terminal do
 			expect(terminal.flash).to eq ''
 		end
 	end
-
-
 end

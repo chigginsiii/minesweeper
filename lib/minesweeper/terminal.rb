@@ -50,7 +50,6 @@ module Minesweeper
 			end
 		end
 
-
 		def move(dir)
 			position.send(dir)
 		end
