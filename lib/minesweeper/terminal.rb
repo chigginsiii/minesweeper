@@ -38,6 +38,8 @@ module Minesweeper
 		end
 		alias_method :flash, :read_flash_msg
 
+		private
+
 		def check_result
 			return if status.in_progress?
 			if game.won?
@@ -48,7 +50,6 @@ module Minesweeper
 			end
 		end
 
-		private
 
 		def move(dir)
 			position.send(dir)

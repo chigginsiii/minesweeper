@@ -1,9 +1,11 @@
+#
+# - creates a custom known 3 x 3 map and loads it into a BoardEntity
+# - creates a stub for BoardEntity.new to return it to Game
+# - creates a Game available as 'game'
+#
 RSpec.shared_context 'game setup' do
 	let(:cm) { CellMaker.new }
 	let(:custom_cells) do
-		# F c c
-		# c c M
-		# C c M
 		[[ cm.fm(1,1), cm.hc(1,2), cm.hc(1,3) ],
 		 [ cm.hc(2,1), cm.rc(2,2), cm.hm(2,3) ],
 		 [ cm.rc(3,1), cm.rc(3,2), cm.hm(3,3) ]]
