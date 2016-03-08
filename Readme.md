@@ -1,5 +1,7 @@
 # Minesweeper
 
+![minesweeper](https://github.com/chigginsiii/minesweeper/blob/master/minesweeper_terminal.png)
+
 An implementation of Minesweeper in Ruby. 
 
 ## Install
