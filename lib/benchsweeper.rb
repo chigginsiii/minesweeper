@@ -7,7 +7,7 @@ require 'benchsweeper/solver'
 require 'benchsweeper/cli'
 
 module Benchsweeper
-	def self.solver(game)
-		Solver.new game
-	end
+  def self.solver(game)
+    Solver.new game
+  end
 end

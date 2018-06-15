@@ -1,60 +1,60 @@
 module Minesweeper
-	class StatusEntity
-		attr_accessor :state, :result
+  class StatusEntity
+    attr_accessor :state, :result
 
-		def initialize
-			@state  = :in_progress
-			@result = :incomplete
-		end
+    def initialize
+      @state  = :in_progress
+      @result = :incomplete
+    end
 
-		#
-		# command
-		#
+    #
+    # command
+    #
 
-		def complete(result)
-			validate_result result
-			@state  = :complete
-			@result = result
-		end
+    def complete(result)
+      validate_result result
+      @state  = :complete
+      @result = result
+    end
 
-		#
-		# query
-		#
+    #
+    # query
+    #
 
-		def complete?
-			@state == :complete
-		end
+    def complete?
+      @state == :complete
+    end
 
-		def in_progress?
-			@state == :in_progress
-		end
+    def in_progress?
+      @state == :in_progress
+    end
 
-		def won?
-			@result == :won
-		end
+    def won?
+      @result == :won
+    end
 
-		def lost?
-			@result == :lost
-		end
+    def lost?
+      @result == :lost
+    end
 
-		#
-		# util
-		#
+    #
+    # util
+    #
 
-		def to_s
-			retval = "#{@state}"
-			retval += ":#{@result}" if complete?
-			retval
-		end
+    def to_s
+      retval = "#{@state}"
+      retval += ":#{@result}" if complete?
+      retval
+    end
 
-		def to_str
-			to_s
-		end
+    def to_str
+      to_s
+    end
 
-		private
+    private
 
-		def validate_result(result)
-			raise StatusError, "invalid result '#{result}' (:won, :lost)" unless [:won, :lost].include? result
-		end
-	end
+    def validate_result(result)
+      raise StatusError, "invalid result '#{result}' (:won, :lost)" unless [:won, :lost].include? result
+    end
+  end
 end

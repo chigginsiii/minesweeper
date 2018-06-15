@@ -15,11 +15,11 @@ require 'minesweeper/terminal'
 
 module Minesweeper
 
-	DefaultRows 	= 10
-	DefaultCols 	= 12
-	DefaultMines 	= 20
+  DefaultRows = 10
+  DefaultCols = 12
+  DefaultMines  = 20
 
-	def self.new_game(rows: DefaultRows, cols: DefaultCols, mines: DefaultMines)
-		Minesweeper::Game.new(rows: rows, cols: cols, mines: mines)
-	end
+  def self.new_game(rows: DefaultRows, cols: DefaultCols, mines: DefaultMines)
+    Minesweeper::Game.new(rows: rows, cols: cols, mines: mines)
+  end
 end
