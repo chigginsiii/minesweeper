@@ -10,42 +10,42 @@ def return_num(val)
 end
 
 def setup
-	@opts = Minesweeper::CLI.configure
-	setup_game
+  @opts = Minesweeper::CLI.configure
+  setup_game
 end
 
 def setup_game
-	@game = Minesweeper::Terminal.new_game(rows: @opts.rows, cols: @opts.cols, mines: @opts.mines)
+  @game = Minesweeper::Terminal.new_game(rows: @opts.rows, cols: @opts.cols, mines: @opts.mines)
 end
 
 def start_game
-	Dispel::Screen.open do |screen|
-		screen.draw view
+  Dispel::Screen.open do |screen|
+    screen.draw view
 
-		Dispel::Keyboard.output do |key|
-			case key
-			# move selection
-			when :up, :down, :left, :right
-				@game.dispatch_action :move, key
-			# actions
-			when 'f'
-				@game.dispatch_action :toggle
-			when 's'
-				@game.dispatch_action :reveal
-			when 'q'
-				break
-			when 'r'
-				setup_game
-			end
-			screen.draw view
-		end
-	end
+    Dispel::Keyboard.output do |key|
+      case key
+      # move selection
+      when :up, :down, :left, :right
+        @game.dispatch_action :move, key
+      # actions
+      when 'f'
+        @game.dispatch_action :toggle
+      when 's'
+        @game.dispatch_action :reveal
+      when 'q'
+        break
+      when 'r'
+        setup_game
+      end
+      screen.draw view
+    end
+  end
 end
 
 def view
-	lines = ["", "#{@game.stats}", "", *(@game.draw)]
-	lines << @game.read_flash_msg
-	lines << "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit."
+  lines = ["", "#{@game.stats}", "", *(@game.draw)]
+  lines << @game.read_flash_msg
+  lines << "(f)lag, (s)elect, arrow keys to move, (r)estart, (q)uit."
   lines.join("\n")
 end
 

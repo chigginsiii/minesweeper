@@ -19,7 +19,7 @@ NumCols  = config.cols
 NumMines = config.mines
 
 num_wins = 0
-times    = []
+times  = []
 
 puts "#{config}\n"
 
@@ -30,43 +30,43 @@ bar = ProgressBar.new(NumGames)
 #
 
 (1..NumGames).each do |i|
-	game = Minesweeper.new_game(rows: NumRows, cols: NumCols, mines: NumMines)
-	solver = Benchsweeper.solver(game)
+  game = Minesweeper.new_game(rows: NumRows, cols: NumCols, mines: NumMines)
+  solver = Benchsweeper.solver(game)
 
-	#
-	# this block is ready to be moved into its own module
-	# where it can keep track of it timing/wins/etc
-	#
+  #
+  # this block is ready to be moved into its own module
+  # where it can keep track of it timing/wins/etc
+  #
 
-	t0 = Time.now
-	until game.complete?
-		# these are both 100% certain
-		must_be_mines_result = solver.must_be_mines
-		next if solver.must_not_be_mines || must_be_mines_result
-		break if game.complete?
+  t0 = Time.now
+  until game.complete?
+    # these are both 100% certain
+    must_be_mines_result = solver.must_be_mines
+    next if solver.must_not_be_mines || must_be_mines_result
+    break if game.complete?
 
-		next if solver.pick_random_adjacent
-		break if game.complete?
+    next if solver.pick_random_adjacent
+    break if game.complete?
 
-		next if solver.pick_random
-		break if game.complete?
-	end
+    next if solver.pick_random
+    break if game.complete?
+  end
 
-	# record result/timing, next game
-	times.push [(Time.now - t0), game.status.result]
+  # record result/timing, next game
+  times.push [(Time.now - t0), game.status.result]
   num_wins += 1 if game.won?
 
 
-	bar.increment! unless config.boards
+  bar.increment! unless config.boards
 
-	# would be cool to partition the times on won/lost, then get min/max/avg.
+  # would be cool to partition the times on won/lost, then get min/max/avg.
 
-	if config.boards
-		puts "\n#{game.flat_board}"
-		puts "#{game.status}"
-		puts "#{num_wins}/#{i} in #{times.last}"
-		puts "#{config.cols.times{'-'}}"
-	end
+  if config.boards
+    puts "\n#{game.flat_board}"
+    puts "#{game.status}"
+    puts "#{num_wins}/#{i} in #{times.last}"
+    puts "#{config.cols.times{'-'}}"
+  end
 end
 
 
